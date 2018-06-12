@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"hello/model"
+	"go-src/config"
 )
 
 type Mysql struct {
@@ -12,14 +13,15 @@ type Mysql struct {
 }
 
 const DRIVE_NAME = "mysql"
-const DSN = "root:Albert@0510@tcp(47.100.126.84:3306)/kd"
 
 var mysqlDB map[string]Mysql
 var Conn Mysql
+var DSN string
 
 func init() {
 	mysqlDB = make(map[string]Mysql)
 	Conn = GetInstance()
+	DSN = config.DSN
 }
 
 func GetInstance() Mysql {
