@@ -5,7 +5,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"kd.explorer/model"
-	"fmt"
 	"kd.explorer/config"
 )
 
