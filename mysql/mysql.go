@@ -26,7 +26,6 @@ func init() {
 }
 
 func GetInstance() Mysql {
-	fmt.Println(DSN)
 	if mysql, ok := mysqlDB[DSN]; ok {
 		return mysql
 	}
