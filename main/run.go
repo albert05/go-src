@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"hello/mysql"
-	"hello/service"
-	"hello/tool"
-	"hello/model"
+	"kd.explorer/mysql"
+	"kd.explorer/service"
+	"kd.explorer/tool"
+	"kd.explorer/model"
 	"time"
 )
 

@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"hello/model"
-	"go-src/config"
+	"kd.explorer/model"
+	"kd.explorer/config"
 )
 
 type Mysql struct {
