@@ -26,7 +26,8 @@ func main() {
 	status := 0
 	workId := "exchange"
 
-	for n := tool.NowTime(); n - startTime < RUN_DURATION; {
+	n := tool.NowTime()
+	for n - startTime < RUN_DURATION {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id='%s' limit 10", status, workId)
 		fmt.Println(mysql.Conn)
 		list, err := mysql.Conn.FindAll(sql)
@@ -49,6 +50,7 @@ func main() {
 
 		time.Sleep(5 * time.Second)
 		fmt.Println("sleep 5 second")
+		n = tool.NowTime()
 	}
 }
 
