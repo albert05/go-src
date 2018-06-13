@@ -8,11 +8,19 @@ import (
 	"kd.explorer/tool"
 	"kd.explorer/model"
 	"time"
+	"kd.explorer/common"
+	"os"
 )
 
 const RUN_DURATION = 300
+const LOCK_CODE  = "RUN.EXCHANGE.TEST"
 
 func main() {
+	if !common.Lock(LOCK_CODE) {
+		fmt.Println(LOCK_CODE + " is running...")
+		os.Exit(0)
+	}
+	defer common.UnLock(LOCK_CODE)
 
 	startTime := tool.NowTime()
 	status := 0
@@ -20,6 +28,7 @@ func main() {
 
 	for n := tool.NowTime(); n - startTime < RUN_DURATION; {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id='%s' limit 10", status, workId)
+		fmt.Println(mysql.Conn)
 		list, err := mysql.Conn.FindAll(sql)
 		if err != nil {
 			log.Fatal(err)
