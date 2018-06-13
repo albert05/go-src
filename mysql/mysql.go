@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"kd.explorer/model"
+	"fmt"
 	"kd.explorer/config"
 )
 
@@ -19,12 +20,13 @@ var Conn Mysql
 var DSN string
 
 func init() {
+	DSN = config.DSN
 	mysqlDB = make(map[string]Mysql)
 	Conn = GetInstance()
-	DSN = config.DSN
 }
 
 func GetInstance() Mysql {
+	fmt.Println(DSN)
 	if mysql, ok := mysqlDB[DSN]; ok {
 		return mysql
 	}
