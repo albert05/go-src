@@ -28,7 +28,8 @@ type Code struct {
 }
 
 func init() {
-	IMAGE_PATH = common.GetRootDir() + "/resource/img/"
+	// 目录暂设置在laravel
+	IMAGE_PATH = "/root/nginx/www/laravel/public/goimg/"
 }
 
 func (code *Code) setCookie(cookie string) {
@@ -74,5 +75,5 @@ func (code *Code) CreateImage() {
 
 func (code *Code) RandFileName() {
 	randNum := common.GenerateRangeNum(10000, 99999)
-	code.FileName = IMAGE_PATH + strconv.Itoa(randNum) + "captcha_.png"
+	code.FileName = IMAGE_PATH + "captcha_" + strconv.Itoa(randNum) + ".png"
 }
