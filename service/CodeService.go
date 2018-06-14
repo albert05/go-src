@@ -9,12 +9,14 @@ import (
 	"io"
 	"bytes"
 	"os"
+	"strings"
 )
 
 const CODE_URL = "http://deposit.koudailc.com%s";
 const REFRESH_URL = "http://deposit.koudailc.com/user/captcha?refresh";
 
 var IMAGE_PATH string
+var IMAGE_PREFIX_PATH string
 
 type CodeResponse struct {
 	Hash1 int ``
@@ -29,11 +31,16 @@ type Code struct {
 
 func init() {
 	// 目录暂设置在laravel
-	IMAGE_PATH = "/root/nginx/www/laravel/public/goimg/"
+	IMAGE_PREFIX_PATH = "/root/nginx/www/laravel/public/"
+	IMAGE_PATH = IMAGE_PREFIX_PATH + "goimg/"
 }
 
 func (code *Code) setCookie(cookie string) {
 	code.Cookie = cookie
+}
+
+func (code *Code) getFileName() string {
+	return strings.TrimPrefix(code.FileName, IMAGE_PREFIX_PATH)
 }
 
 func (code *Code) Refresh() {
