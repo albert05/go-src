@@ -7,6 +7,8 @@ import (
 	"time"
 	"kd.explorer/model"
 	"encoding/json"
+	"log"
+	"strings"
 )
 
 type TaskResponse struct {
@@ -50,12 +52,18 @@ func runT(task model.MapModel, ch chan<- string) {
 		return
 	}
 
-	timePoint := task.GetAttrFloat("time_point")
+	var code Code
+	code.setCookie(cookie)
+	code.Refresh()
+	code.RandFileName()
+	code.CreateImage()
 
-	wait(timePoint)
+	mysql.Conn.Exec(fmt.Sprintf("update tasks set img_url='%s' where id=%d", code.FileName, taskId))
+
+	timePoint := task.GetAttrFloat("time_point")
+	imgCode := wait(timePoint, taskId)
 
 	pid := task.GetAttrString("product_id")
-	imgCode := task.GetAttrString("code")
 	prizeNumber := task.GetAttrString("prize_number")
 
 	params := map[string]string{
@@ -86,15 +94,27 @@ func runT(task model.MapModel, ch chan<- string) {
 	ch <- "success"
 }
 
-func wait(timePoint float64) {
+func wait(timePoint float64, taskId int) string {
 	currTime := tool.TimeInt2float(tool.CurrentMicro())
 	fmt.Println(currTime, timePoint)
+
+	var imgCode string
 
 	for currTime < timePoint {
 		time.Sleep(DEFAULT_SLEEP_TIME)
 
+		if imgCode == "" {
+			sql := fmt.Sprintf("SELECT * FROM tasks WHERE id =%d", taskId)
+			task, err := mysql.Conn.FindOne(sql)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			imgCode = strings.Trim(task.GetAttrString("code"), " ")
+		}
+
 		currTime = tool.TimeInt2float(tool.CurrentMicro())
 	}
 
-	return
+	return imgCode
 }

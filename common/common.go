@@ -3,6 +3,8 @@ package common
 import (
 	"fmt"
 	"os"
+	"math/rand"
+	"time"
 )
 
 const LOCK_BASE_PATH  = "/tmp/"
@@ -54,4 +56,10 @@ func UnLock(name string) bool {
 	}
 
 	return true
+}
+
+func GenerateRangeNum(min, max int) int {
+	rand.Seed(time.Now().Unix())
+	randNum := rand.Intn(max - min) + min
+	return randNum
 }
