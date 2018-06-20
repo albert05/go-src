@@ -11,6 +11,10 @@ func NowDateStr() string {
 	return time.Now().Format(DefaultDateFormatSTR)
 }
 
+func NowDateShortStr() string {
+	return time.Now().Format("20060102")
+}
+
 func NowTime() int64 {
 	return time.Now().Unix()
 }

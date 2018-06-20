@@ -26,6 +26,7 @@ func main() {
 	status := 0
 	workId := "exchange"
 	currentDir := common.GetPwd()
+	logPath := common.GetLogPath(workId)
 
 	n := tool.NowTime()
 	for n - startTime < RunDURATION {
@@ -48,7 +49,7 @@ func main() {
 		if len(taskList) > 0 {
 			ids := strings.Join(taskList, ",")
 			mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", ids))
-			cmdStr := fmt.Sprintf("cd %s;./%s -t %s -l %s", currentDir, TaskScriptName, "exchange", ids)
+			cmdStr := fmt.Sprintf("cd %s;./%s -t %s -l %s %s", currentDir, TaskScriptName, workId, ids, logPath)
 			common.Cmd(cmdStr)
 		}
 
@@ -57,4 +58,6 @@ func main() {
 		n = tool.NowTime()
 	}
 }
+
+
 

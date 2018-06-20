@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"kd.explorer/tool"
 )
 
 // 检查文件或目录是否存在
@@ -141,4 +142,8 @@ func GetAllFileByPattern(dir string, pattern string) []string {
 	}
 
 	return files
+}
+
+func GetLogPath(jobType string) string {
+	return " 1> /root/nginx/www/logs/kd/" + jobType + "/" + tool.NowDateShortStr() + ".log 2>&1"
 }
