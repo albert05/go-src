@@ -12,7 +12,7 @@ import (
 )
 
 const RunDURATION = 300
-const LockCODE  = "RUN.MONITOR.EXCHANGE.TEST"
+const LockCODE  = "RUN:MONITOR:EXCHANGE"
 const TaskScriptName = "run"
 
 func main() {
