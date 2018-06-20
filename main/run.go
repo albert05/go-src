@@ -16,6 +16,8 @@ func main() {
 	flag.StringVar(&jobList, "l", "", "jobList")
 	flag.Parse()
 
+	fmt.Println(jobList)
+
 	sql := fmt.Sprintf("SELECT * FROM tasks WHERE id in (%s)", jobList)
 	fmt.Println(mysql.Conn)
 	list, err := mysql.Conn.FindAll(sql)

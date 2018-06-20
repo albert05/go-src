@@ -57,6 +57,8 @@ func runT(task model.MapModel, ch chan<- string) {
 	code.RandFileName()
 	code.CreateImage()
 
+	fmt.Println(cookie, code.getFileName())
+
 	mysql.Conn.Exec(fmt.Sprintf("update tasks set img_url='%s' where id=%d", code.getFileName(), taskId))
 
 	timePoint := task.GetAttrFloat("time_point")
