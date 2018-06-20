@@ -12,7 +12,7 @@ func NowDateStr() string {
 }
 
 func NowDateShortStr() string {
-	return time.Now().Format("20060102")
+	return time.Now().Format("20060102150405")
 }
 
 func NowTime() int64 {
