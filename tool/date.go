@@ -5,10 +5,10 @@ import (
 	"strconv"
 )
 
-const DEFAULT_DATE_FORMAT_STR = "2006-01-02 15:04:05"
+const DefaultDateFormatSTR = "2006-01-02 15:04:05"
 
 func NowDateStr() string {
-	return time.Now().Format(DEFAULT_DATE_FORMAT_STR)
+	return time.Now().Format(DefaultDateFormatSTR)
 }
 
 func NowTime() int64 {

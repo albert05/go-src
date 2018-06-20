@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"os"
 	"math/rand"
-	"time"
 )
 
-const LOCK_BASE_PATH  = "/tmp/"
+const LockBasePATH  = "/tmp/"
 var Config map[string]string
 
 func initConfig(path string) {
@@ -31,7 +30,7 @@ func Substr(s string, pos, length int) string {
 }
 
 func Lock(name string) bool {
-	fileName := fmt.Sprintf(LOCK_BASE_PATH + "%s.lock", name)
+	fileName := fmt.Sprintf(LockBasePATH + "%s.lock", name)
 	if IsExist(fileName) {
 		return false
 	}
@@ -46,7 +45,7 @@ func Lock(name string) bool {
 }
 
 func UnLock(name string) bool {
-	fileName := fmt.Sprintf(LOCK_BASE_PATH + "%s.lock", name)
+	fileName := fmt.Sprintf(LockBasePATH + "%s.lock", name)
 	if !IsExist(fileName) {
 		return false
 	}
@@ -59,7 +58,6 @@ func UnLock(name string) bool {
 }
 
 func GenerateRangeNum(min, max int) int {
-	rand.Seed(time.Now().Unix())
 	randNum := rand.Intn(max - min) + min
 	return randNum
 }

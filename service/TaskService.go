@@ -16,8 +16,8 @@ type TaskResponse struct {
 	Message string ``
 }
 
-const DEFAULT_SLEEP_TIME = time.Millisecond * 10
-const EXCHANGE_URL = "https://deposit.koudailc.com/user-order-form/convert"
+const DefaultSleepTIME = time.Millisecond * 10
+const ExchangeURL = "https://deposit.koudailc.com/user-order-form/convert"
 
 func GoRunTask(taskList []model.MapModel) {
 	ch := make(chan string)
@@ -72,7 +72,7 @@ func runT(task model.MapModel, ch chan<- string) {
 		"prize_number": prizeNumber,
 	}
 
-	body, err := tool.Post(EXCHANGE_URL, params, cookie)
+	body, err := tool.Post(ExchangeURL, params, cookie)
 	if err != nil {
 		fmt.Println(err)
 		ch <- err.Error()
@@ -84,7 +84,7 @@ func runT(task model.MapModel, ch chan<- string) {
 
 	status := 3
 	msg := ""
-	if tool.HTTP_SUCCESS != result.Code {
+	if tool.HttpSUCCESS != result.Code {
 		status = 2
 		msg = result.Message
 	}
@@ -101,7 +101,7 @@ func wait(timePoint float64, taskId int) string {
 	var imgCode string
 
 	for currTime < timePoint {
-		time.Sleep(DEFAULT_SLEEP_TIME)
+		time.Sleep(DefaultSleepTIME)
 
 		if imgCode == "" {
 			sql := fmt.Sprintf("SELECT * FROM tasks WHERE id =%d", taskId)

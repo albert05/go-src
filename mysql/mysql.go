@@ -12,7 +12,7 @@ type Mysql struct {
 	DB *sql.DB
 }
 
-const DRIVE_NAME = "mysql"
+const DriverNAME = "mysql"
 
 var mysqlDB map[string]Mysql
 var Conn Mysql
@@ -29,7 +29,7 @@ func GetInstance() Mysql {
 		return mysql
 	}
 
-	db, err := sql.Open(DRIVE_NAME, DSN)
+	db, err := sql.Open(DriverNAME, DSN)
 	if err != nil {
 		log.Fatal(err)
 		return Mysql{}

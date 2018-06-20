@@ -12,11 +12,11 @@ type loginResponse struct {
 	Sessionid string ``
 }
 
-const LOGIN_URL = "http://deposit.koudailc.com/user/login"
+const LoginURL = "http://deposit.koudailc.com/user/login"
 
 func Login(username, password string) (string, error) {
 	params := fmt.Sprintf("username=%s&password=%s", username, password)
-	body, err := tool.PostWithoutCookie(LOGIN_URL, params)
+	body, err := tool.PostWithoutCookie(LoginURL, params)
 	if err != nil {
 		return "", err
 	}
@@ -26,7 +26,7 @@ func Login(username, password string) (string, error) {
 	var result loginResponse
 	json.Unmarshal(body, &result)
 
-	if tool.HTTP_SUCCESS == result.Code {
+	if tool.HttpSUCCESS == result.Code {
 		return result.Sessionid, nil
 	}
 

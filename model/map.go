@@ -4,8 +4,8 @@ import "strconv"
 
 type MapModel map[string]interface{}
 
-const DEFAULT_STRVAL = ""
-const DEFAULT_FLTVAL = 0
+const DefaultSTRVAL = ""
+const DefaultFLTVAL = 0
 
 func (this MapModel) GetAttrString(k string) string {
 	if val, ok := this[k];ok {
@@ -14,7 +14,7 @@ func (this MapModel) GetAttrString(k string) string {
 		}
 	}
 
-	return DEFAULT_STRVAL
+	return DefaultSTRVAL
 }
 
 func (this MapModel) GetAttrFloat(k string) float64 {
@@ -22,7 +22,7 @@ func (this MapModel) GetAttrFloat(k string) float64 {
 
 	flt, err := strconv.ParseFloat(str, 64)
 	if err != nil {
-		return DEFAULT_FLTVAL
+		return DefaultFLTVAL
 	}
 
 	return flt
@@ -33,7 +33,7 @@ func (this MapModel) GetAttrInt(k string) int {
 
 	i, err := strconv.Atoi(str)
 	if err != nil {
-		return DEFAULT_FLTVAL
+		return DefaultFLTVAL
 	}
 
 	return i

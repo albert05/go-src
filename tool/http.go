@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-const DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded"
-const HTTP_SUCCESS = 0
+const DefaultContentTYPE = "application/x-www-form-urlencoded"
+const HttpSUCCESS = 0
 
-func Post(urlx string, params map[string]string, cookie string) ([]byte, error) {
+func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 	v := url.Values{}
 	for k, val := range params {
 		v.Set(k, val)
@@ -19,7 +19,7 @@ func Post(urlx string, params map[string]string, cookie string) ([]byte, error) 
 	//form数据编码
 	body := ioutil.NopCloser(strings.NewReader(v.Encode()))
 	client := &http.Client{}
-	request, err := http.NewRequest("POST", urlx, body)
+	request, err := http.NewRequest("POST", uri, body)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func Post(urlx string, params map[string]string, cookie string) ([]byte, error) 
 
 
 func PostWithoutCookie(url, params string) ([]byte, error) {
-	resp, err := http.Post(url, DEFAULT_CONTENT_TYPE, strings.NewReader(params))
+	resp, err := http.Post(url, DefaultContentTYPE, strings.NewReader(params))
 	if err != nil {
 		return nil, err
 	}

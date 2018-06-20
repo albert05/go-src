@@ -12,11 +12,11 @@ import (
 	"strings"
 )
 
-const CODE_URL = "http://deposit.koudailc.com%s";
-const REFRESH_URL = "http://deposit.koudailc.com/user/captcha?refresh";
+const CodeURL = "http://deposit.koudailc.com%s"
+const RefreshURL = "http://deposit.koudailc.com/user/captcha?refresh"
 
-var IMAGE_PATH string
-var IMAGE_PREFIX_PATH string
+var ImagePATH string
+var ImagePrefixPATH string
 
 type CodeResponse struct {
 	Hash1 int ``
@@ -31,8 +31,8 @@ type Code struct {
 
 func init() {
 	// 目录暂设置在laravel
-	IMAGE_PREFIX_PATH = "/root/nginx/www/laravel/public/"
-	IMAGE_PATH = IMAGE_PREFIX_PATH + "goimg/"
+	ImagePrefixPATH = "/root/nginx/www/laravel/public/"
+	ImagePATH = ImagePrefixPATH + "goimg/"
 }
 
 func (code *Code) setCookie(cookie string) {
@@ -40,13 +40,13 @@ func (code *Code) setCookie(cookie string) {
 }
 
 func (code *Code) getFileName() string {
-	return strings.TrimPrefix(code.FileName, IMAGE_PREFIX_PATH)
+	return strings.TrimPrefix(code.FileName, ImagePrefixPATH)
 }
 
 func (code *Code) Refresh() {
 	params := map[string]string{}
 
-	body, err := tool.Post(REFRESH_URL, params, code.Cookie)
+	body, err := tool.Post(RefreshURL, params, code.Cookie)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -55,7 +55,7 @@ func (code *Code) Refresh() {
 	var result CodeResponse
 	json.Unmarshal(body, &result)
 
-	code.Url = fmt.Sprintf(CODE_URL, result.Url)
+	code.Url = fmt.Sprintf(CodeURL, result.Url)
 }
 
 func (code *Code) CreateImage() {
@@ -82,5 +82,5 @@ func (code *Code) CreateImage() {
 
 func (code *Code) RandFileName() {
 	randNum := common.GenerateRangeNum(10000, 99999)
-	code.FileName = IMAGE_PATH + "captcha_" + strconv.Itoa(randNum) + ".png"
+	code.FileName = ImagePATH + "captcha_" + strconv.Itoa(randNum) + ".png"
 }

@@ -12,22 +12,22 @@ import (
 	"os"
 )
 
-const RUN_DURATION = 300
-const LOCK_CODE  = "RUN.EXCHANGE.TEST"
+const RunDURATION = 300
+const LockCODE  = "RUN.EXCHANGE.TEST"
 
 func main() {
-	if !common.Lock(LOCK_CODE) {
-		fmt.Println(LOCK_CODE + " is running...")
+	if !common.Lock(LockCODE) {
+		fmt.Println(LockCODE + " is running...")
 		os.Exit(0)
 	}
-	defer common.UnLock(LOCK_CODE)
+	defer common.UnLock(LockCODE)
 
 	startTime := tool.NowTime()
 	status := 0
 	workId := "exchange"
 
 	n := tool.NowTime()
-	for n - startTime < RUN_DURATION {
+	for n - startTime < RunDURATION {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id='%s' limit 10", status, workId)
 		fmt.Println(mysql.Conn)
 		list, err := mysql.Conn.FindAll(sql)
