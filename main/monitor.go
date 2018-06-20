@@ -20,7 +20,10 @@ func main() {
 		fmt.Println(LockCODE + " is running...")
 		os.Exit(0)
 	}
-	defer common.UnLock(LockCODE)
+	defer func() {
+		common.UnLock(LockCODE)
+		os.Exit(0)
+	}()
 
 	startTime := tool.NowTime()
 	status := 0
