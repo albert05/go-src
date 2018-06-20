@@ -35,7 +35,6 @@ func GoRunTask(taskList []model.MapModel) {
 func runT(task model.MapModel, ch chan<- string) {
 	taskId := task.GetAttrInt("id")
 	fmt.Println(fmt.Sprintf("taskID %d start work", taskId))
-	mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id=%d", taskId))
 	userKey := task.GetAttrString("user_key")
 
 	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM userinfos WHERE user_key = '%s'", userKey))

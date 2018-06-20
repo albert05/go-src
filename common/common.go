@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"math/rand"
+	"os/exec"
+	"bytes"
 )
 
 const LockBasePATH  = "/tmp/"
@@ -60,4 +62,24 @@ func UnLock(name string) bool {
 func GenerateRangeNum(min, max int) int {
 	randNum := rand.Intn(max - min) + min
 	return randNum
+}
+
+
+// 同步执行命令
+func Cmd(cmdStr string) error {
+	cmd := exec.Command("/bin/sh", "-c", cmdStr)
+	cmd.Start()
+	status := cmd.Wait()
+	return status
+}
+
+// 同步执行命令, 并返回执行的结果
+func Exec(cmdStr string) (string, error) {
+	cmd := exec.Command("/bin/sh", "-c", cmdStr)
+	out, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes.TrimSpace(out)), nil
 }
