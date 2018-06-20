@@ -31,7 +31,6 @@ func main() {
 	n := tool.NowTime()
 	for n - startTime < RunDURATION {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id='%s' limit 10", status, workId)
-		fmt.Println(mysql.Conn)
 		list, err := mysql.Conn.FindAll(sql)
 		if err != nil {
 			log.Fatal(err)
