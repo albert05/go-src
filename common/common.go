@@ -65,12 +65,10 @@ func GenerateRangeNum(min, max int) int {
 }
 
 
-// 同步执行命令
-func Cmd(cmdStr string) error {
+// 异步执行命令
+func Cmd(cmdStr string) {
 	cmd := exec.Command("/bin/sh", "-c", cmdStr)
 	cmd.Start()
-	status := cmd.Wait()
-	return status
 }
 
 // 同步执行命令, 并返回执行的结果
