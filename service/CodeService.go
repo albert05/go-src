@@ -82,5 +82,6 @@ func (code *Code) CreateImage() {
 
 func (code *Code) RandFileName() {
 	randNum := common.GenerateRangeNum(10000, 99999)
-	code.FileName = ImagePATH + "captcha_" + strconv.Itoa(randNum) + ".png"
+	dateStr := strconv.FormatInt(tool.NowTime(), 32)
+	code.FileName = ImagePATH + "captcha_" + dateStr + "_" + strconv.Itoa(randNum) + ".png"
 }
