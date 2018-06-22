@@ -6,9 +6,13 @@ import (
 	"math/rand"
 	"os/exec"
 	"bytes"
+	"time"
+	"kd.explorer/tool"
 )
 
 const LockBasePATH  = "/tmp/"
+const DefaultSleepTIME = time.Millisecond * 10
+
 var Config map[string]string
 
 func initConfig(path string) {
@@ -80,4 +84,15 @@ func Exec(cmdStr string) (string, error) {
 	}
 
 	return string(bytes.TrimSpace(out)), nil
+}
+
+func Wait(timePoint float64) {
+	currTime := tool.TimeInt2float(tool.CurrentMicro())
+	fmt.Println(currTime, timePoint)
+
+	for currTime < timePoint {
+		time.Sleep(DefaultSleepTIME)
+
+		currTime = tool.TimeInt2float(tool.CurrentMicro())
+	}
 }

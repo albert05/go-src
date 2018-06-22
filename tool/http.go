@@ -8,6 +8,7 @@ import (
 )
 
 const DefaultContentTYPE = "application/x-www-form-urlencoded"
+const JsonContentTYPE = "application/json"
 const HttpSUCCESS = 0
 
 func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
@@ -48,6 +49,21 @@ func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 
 func PostWithoutCookie(url, params string) ([]byte, error) {
 	resp, err := http.Post(url, DefaultContentTYPE, strings.NewReader(params))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func PostJson(url, params string) ([]byte, error) {
+	resp, err := http.Post(url, JsonContentTYPE, strings.NewReader(params))
 	if err != nil {
 		return nil, err
 	}

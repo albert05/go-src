@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"log"
 	"strings"
+	"kd.explorer/common"
 )
 
 type TaskResponse struct {
@@ -16,7 +17,6 @@ type TaskResponse struct {
 	Message string ``
 }
 
-const DefaultSleepTIME = time.Millisecond * 10
 const ExchangeURL = "https://deposit.koudailc.com/user-order-form/convert"
 
 func GoRunTask(taskList []model.MapModel) {
@@ -102,7 +102,7 @@ func wait(timePoint float64, taskId int) string {
 	var imgCode string
 
 	for currTime < timePoint {
-		time.Sleep(DefaultSleepTIME)
+		time.Sleep(common.DefaultSleepTIME)
 
 		if imgCode == "" {
 			sql := fmt.Sprintf("SELECT * FROM tasks WHERE id =%d", taskId)
