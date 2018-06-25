@@ -145,5 +145,10 @@ func GetAllFileByPattern(dir string, pattern string) []string {
 }
 
 func GetLogPath(jobType string) string {
-	return " 1> /root/nginx/www/logs/kd/" + jobType + "/" + tool.NowDateShortStr() + ".log 2>&1"
+	path := "/root/nginx/www/logs/kd/" + jobType + "/"
+	if err := MakeDir(path); err != nil {
+		return ""
+	}
+
+	return " 1> " + path + tool.NowDateShortStr() + ".log 2>&1"
 }
