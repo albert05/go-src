@@ -1,3 +1,7 @@
+//url := "https://enjoy.abchina.com/yh-web/customer/giftTokenDraw"
+//params := `{"sessionId":"{ps_db86dd27589e11ea2b07b3018f10c8e8}_common","ruleNo":"064119","actNo":"999999CXE00064117","discType":"12","actType":"E","appr":"10"}`
+//actNo := "999999CXE00064117"
+//sessionID := "d46d835dab7daf16ccbc8bc27d5f995e"
 package main
 
 import (
@@ -5,31 +9,29 @@ import (
 	"fmt"
 	"flag"
 	"kd.explorer/common"
+	"log"
+	"kd.explorer/mysql"
 )
 
 func main() {
-	var actNo string
-	var sessionID string
-	var startTime float64
-	flag.StringVar(&actNo, "a", "", "actNo")
-	flag.StringVar(&sessionID, "s", "", "sessionID")
-	flag.Float64Var(&startTime, "t", 100000, "startTime")
+	var jobList string
+	flag.StringVar(&jobList, "l", "", "jobList")
 	flag.Parse()
 
-	//url := "https://enjoy.abchina.com/yh-web/customer/giftTokenDraw"
-	//params := `{"sessionId":"{ps_db86dd27589e11ea2b07b3018f10c8e8}_common","ruleNo":"064119","actNo":"999999CXE00064117","discType":"12","actType":"E","appr":"10"}`
-	//actNo := "999999CXE00064117"
-	//sessionID := "d46d835dab7daf16ccbc8bc27d5f995e"
-
-	giftItem, err := service.GetGiftDetail(actNo)
+	sql := fmt.Sprintf("SELECT * FROM tasks WHERE id in (%s)", jobList)
+	job, err := mysql.Conn.FindOne(sql)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-	common.Wait(startTime)
+	giftItem, err := service.GetGiftDetail(job.GetAttrString("product_id"))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	giftItem.SetSession(sessionID)
+	common.Wait(job.GetAttrFloat("time_point"))
+
+	giftItem.SetSession(job.GetAttrString("code"))
 	ret := giftItem.RunGift()
 	fmt.Println(ret)
 }
-

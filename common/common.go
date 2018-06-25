@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"time"
 	"kd.explorer/tool"
+	"kd.explorer/config"
 )
 
 const LockBasePATH  = "/tmp/"
@@ -95,4 +96,15 @@ func Wait(timePoint float64) {
 
 		currTime = tool.TimeInt2float(tool.CurrentMicro())
 	}
+}
+
+func GetCmdStr(jobType string, extArr map[string]string) string {
+	var params string
+	if ("abcGift" == jobType) {
+		params = fmt.Sprintf(config.TaskList[jobType]["params"], extArr["ids"])
+	} else {
+		params = fmt.Sprintf(config.TaskList[jobType]["params"], jobType, extArr["ids"])
+	}
+
+	return 	fmt.Sprintf("cd %s;./%s %s %s", extArr["curDir"], config.TaskList[jobType]["scriptName"], params, extArr["logDir"])
 }

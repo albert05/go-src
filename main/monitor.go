@@ -27,13 +27,13 @@ func main() {
 
 	startTime := tool.NowTime()
 	status := 0
-	workId := "exchange"
+	workId := `"exchange","abcGift"`
 	currentDir := common.GetPwd()
 	logPath := common.GetLogPath(workId)
 
 	n := tool.NowTime()
 	for n - startTime < RunDURATION {
-		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id='%s' limit 10", status, workId)
+		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id in(%s) limit 10", status, workId)
 		list, err := mysql.Conn.FindAll(sql)
 		if err != nil {
 			log.Fatal(err)
@@ -51,7 +51,8 @@ func main() {
 		if len(taskList) > 0 {
 			ids := strings.Join(taskList, ",")
 			mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", ids))
-			cmdStr := fmt.Sprintf("cd %s;./%s -t %s -l %s %s", currentDir, TaskScriptName, workId, ids, logPath)
+
+			cmdStr := common.GetCmdStr(workId, map[string]string {"ids": ids, "curDir": currentDir, "logDir": logPath})
 			common.Cmd(cmdStr)
 		}
 
@@ -60,6 +61,3 @@ func main() {
 		n = tool.NowTime()
 	}
 }
-
-
-
