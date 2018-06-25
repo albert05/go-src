@@ -35,3 +35,7 @@ func TimeInt2float(t int64) float64 {
 
 	return f + float64(micro) / 1e6
 }
+
+func SleepSecond(d time.Duration) {
+	time.Sleep(time.Second * d)
+}

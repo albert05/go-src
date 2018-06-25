@@ -11,6 +11,8 @@ import (
 	"kd.explorer/common"
 	"log"
 	"kd.explorer/mysql"
+	"kd.explorer/tool"
+	"os"
 )
 
 func main() {
@@ -22,16 +24,30 @@ func main() {
 	job, err := mysql.Conn.FindOne(sql)
 	if err != nil {
 		log.Fatal(err)
+		os.Exit(-1)
 	}
 
 	giftItem, err := service.GetGiftDetail(job.GetAttrString("product_id"))
 	if err != nil {
 		log.Fatal(err)
+		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=2,result='%s' where id=%d", err.Error(), job.GetAttrInt("id")))
+		os.Exit(-1)
 	}
 
 	common.Wait(job.GetAttrFloat("time_point"))
 
 	giftItem.SetSession(job.GetAttrString("code"))
-	ret := giftItem.RunGift()
-	fmt.Println(ret)
+
+	i := 0
+	for i < 3 {
+		ret := giftItem.RunGift()
+
+		status := 3
+		if !ret {
+			status = 2
+		}
+		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='run gift failed' where id=%d", status, job.GetAttrInt("id")))
+		tool.SleepSecond(5)
+		i++
+	}
 }

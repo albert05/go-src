@@ -31,6 +31,10 @@ type giftListResponse struct {
 	Result giftResult ``
 }
 
+type giftResponse struct {
+	Status string ``
+}
+
 func GetGiftDetail(actNo string) (GiftItem, error) {
 	body, err := tool.PostJson(GiftListURL, DefaultListPARAMS)
 	if err != nil {
@@ -55,14 +59,17 @@ func (this *GiftItem) SetSession(session string) {
 	this.SessionId = fmt.Sprintf(SessionID, session)
 }
 
-func (this *GiftItem) RunGift() string {
+func (this *GiftItem) RunGift() bool {
 	params := this.makeParams()
 	body, err := tool.PostJson(GiftURL, params)
 	if err != nil {
-		return err.Error()
+		return false
 	}
 
-	return string(body)
+	var result giftListResponse
+	json.Unmarshal(body, &result)
+
+	return GiftStatusSUCCESS == result.Status
 }
 
 func (this *GiftItem) makeParams() string {
