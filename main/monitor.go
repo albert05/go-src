@@ -47,7 +47,7 @@ func main() {
 				mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", task.GetAttrString("id")))
 
 				logPath = common.GetLogPath(task.GetAttrString("work_id"))
-				cmdStr := common.GetCmdStr(workId, map[string]string {"ids": task.GetAttrString("id"), "curDir": currentDir, "logDir": logPath})
+				cmdStr := common.GetCmdStr(task.GetAttrString("work_id"), map[string]string {"ids": task.GetAttrString("id"), "curDir": currentDir, "logDir": logPath})
 				common.Cmd(cmdStr)
 				//taskList = append(taskList, task.GetAttrString("id"))
 			}
