@@ -30,6 +30,7 @@ func main() {
 	giftItem, err := service.GetGiftDetail(job.GetAttrString("product_id"))
 	if err != nil {
 		log.Fatal(err)
+		fmt.Println(job.GetAttrInt("id"))
 		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=2,result='%s' where id=%d", err.Error(), job.GetAttrInt("id")))
 		os.Exit(-1)
 	}
