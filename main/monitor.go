@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-const RunDURATION = 300
+const RunDURATION = 290
 const LockCODE  = "RUN:MONITOR:EXCHANGE"
 const TaskScriptName = "run"
 
