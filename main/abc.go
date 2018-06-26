@@ -12,7 +12,6 @@ import (
 	"log"
 	"kd.explorer/mysql"
 	"kd.explorer/tool"
-	"os"
 )
 
 func main() {
@@ -24,15 +23,12 @@ func main() {
 	job, err := mysql.Conn.FindOne(sql)
 	if err != nil {
 		log.Fatal(err)
-		os.Exit(-1)
 	}
 
 	giftItem, err := service.GetGiftDetail(job.GetAttrString("product_id"))
 	if err != nil {
-		log.Fatal(err)
-		fmt.Println(job.GetAttrInt("id"))
 		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=2,result='%s' where id=%d", err.Error(), job.GetAttrInt("id")))
-		os.Exit(-1)
+		log.Fatal(err)
 	}
 
 	common.Wait(job.GetAttrFloat("time_point"))
