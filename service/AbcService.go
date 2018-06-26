@@ -68,6 +68,7 @@ func (this *GiftItem) RunGift() bool {
 
 	var result giftListResponse
 	json.Unmarshal(body, &result)
+	fmt.Println(string(body))
 
 	return GiftStatusSUCCESS == result.Status
 }
