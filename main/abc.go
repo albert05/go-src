@@ -37,13 +37,13 @@ func main() {
 
 	i := 0
 	for i < 3 {
-		ret := giftItem.RunGift()
+		giftRep := giftItem.RunGift()
 
 		status := 3
-		if !ret {
+		if service.GiftStatusSUCCESS != giftRep.Status {
 			status = 2
 		}
-		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='run gift failed' where id=%d", status, job.GetAttrInt("id")))
+		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", status, giftRep.Result, job.GetAttrInt("id")))
 		tool.SleepSecond(5)
 		i++
 	}

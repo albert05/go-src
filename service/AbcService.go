@@ -60,18 +60,18 @@ func (this *GiftItem) SetSession(session string) {
 	this.SessionId = fmt.Sprintf(SessionID, session)
 }
 
-func (this *GiftItem) RunGift() bool {
+func (this *GiftItem) RunGift() giftResponse {
+	var result giftResponse
 	params := this.makeParams()
 	body, err := tool.PostJson(GiftURL, params)
 	if err != nil {
-		return false
+		return result
 	}
 
-	var result giftResponse
 	json.Unmarshal(body, &result)
 	fmt.Println(string(body))
 
-	return GiftStatusSUCCESS == result.Status
+	return result
 }
 
 func (this *GiftItem) makeParams() string {
