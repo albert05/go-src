@@ -8,6 +8,7 @@ import (
 	"time"
 	"kd.explorer/common"
 	"os"
+	"strings"
 )
 
 const RunDURATION = 290
@@ -39,27 +40,28 @@ func main() {
 		}
 
 		now := tool.NowDateStr()
-		//taskList := make([]string, 0)
+		taskList := make(map[string][]string)
 		for _, task := range list {
 			runTime := task.GetAttrString("run_time")
 			if runTime <= now {
-				//ids := strings.Join(taskList, ",")
-				mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", task.GetAttrString("id")))
-
-				logPath = common.GetLogPath(task.GetAttrString("work_id"))
-				cmdStr := common.GetCmdStr(task.GetAttrString("work_id"), map[string]string {"ids": task.GetAttrString("id"), "curDir": currentDir, "logDir": logPath})
-				common.Cmd(cmdStr)
-				//taskList = append(taskList, task.GetAttrString("id"))
+				workId := task.GetAttrString("work_id")
+				if len(taskList[workId]) <= 0 {
+					taskList[workId] = make([]string, 0)
+				}
+				taskList[workId] = append(taskList[workId], task.GetAttrString("id"))
 			}
 		}
 
-		//if len(taskList) > 0 {
-		//	ids := strings.Join(taskList, ",")
-		//	mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", ids))
-		//
-		//	cmdStr := common.GetCmdStr(workId, map[string]string {"ids": ids, "curDir": currentDir, "logDir": logPath})
-		//	common.Cmd(cmdStr)
-		//}
+		if len(taskList) > 0 {
+			for workId, list := range taskList {
+				logPath = common.GetLogPath(workId)
+				ids := strings.Join(list, ",")
+				mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", ids))
+
+				cmdStr := common.GetCmdStr(workId, map[string]string {"ids": ids, "curDir": currentDir, "logDir": logPath})
+				common.Cmd(cmdStr)
+			}
+		}
 
 		time.Sleep(5 * time.Second)
 		fmt.Println("sleep 5 second")
