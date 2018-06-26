@@ -33,6 +33,7 @@ type giftListResponse struct {
 
 type giftResponse struct {
 	Status string ``
+	Result string ``
 }
 
 func GetGiftDetail(actNo string) (GiftItem, error) {
@@ -66,7 +67,7 @@ func (this *GiftItem) RunGift() bool {
 		return false
 	}
 
-	var result giftListResponse
+	var result giftResponse
 	json.Unmarshal(body, &result)
 	fmt.Println(string(body))
 
