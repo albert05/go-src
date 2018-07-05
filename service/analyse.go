@@ -8,6 +8,7 @@ import (
 	"kd.explorer/config"
 	"kd.explorer/tool"
 	"kd.explorer/mysql"
+	"kd.explorer/tool/mail"
 )
 
 const MonitorMaxFEE = 100000  // 10万以下
@@ -32,6 +33,10 @@ func (list *TransList) Analyse() {
 	if len(monitorMsg) > 0 {
 		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
 		fmt.Println(msg)
+		// send mail
+		mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
+
+		//send sms
 		for _, phone := range config.SmsReceiverList {
 			tool.Send(phone, msg)
 		}
