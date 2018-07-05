@@ -10,7 +10,7 @@ import (
 
 const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=5&sortRuleType=2"
 const DefaultUserKEY = "cwf"
-const TransLoginSuccessSTATUS = 0
+const TransLoginSuccessSTATUS = 1
 const RetryCNT = 3
 
 var Cookie string
