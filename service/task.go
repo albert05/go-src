@@ -38,7 +38,7 @@ func runT(task model.MapModel, ch chan<- string) {
 	userKey := task.GetAttrString("user_key")
 
 	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM userinfos WHERE user_key = '%s'", userKey))
-	if err != nil || userInfo == nil {
+	if err != nil || len(userInfo) <= 0 {
 		ch <- "get user info failed"
 		return
 	}

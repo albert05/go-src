@@ -9,11 +9,10 @@ import (
 	"kd.explorer/common"
 	"os"
 	"strings"
+	"kd.explorer/config"
 )
 
-const RunDURATION = 290
 const LockCODE  = "RUN:MONITOR:EXCHANGE"
-const TaskScriptName = "run"
 
 func main() {
 	if !common.Lock(LockCODE) {
@@ -32,7 +31,7 @@ func main() {
 	var logPath string
 
 	n := tool.NowTime()
-	for n - startTime < RunDURATION {
+	for n - startTime < config.RunDURATION {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id in(%s) limit 10", status, workId)
 		list, err := mysql.Conn.FindAll(sql)
 		if err != nil {
