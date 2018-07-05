@@ -10,6 +10,17 @@ var SmsConfig = map[string]string {
 }
 
 var SmsReceiverList = []int {
-	18721809992,
-	13042160232,
+	1000,
+	10001,
+}
+
+var MailConfig = map[string]string {
+	"host": "smtp.qq.com",
+	"port": "465",
+	"username": "***",
+	"password": "***",
+}
+
+var MailReceiverList = []string {
+	"***",
 }
