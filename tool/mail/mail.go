@@ -11,12 +11,6 @@ const defaultPORT = 465 // qq SMTP
 func Send(receivers []string, subject, content string) bool {
 	mail := gomail.NewMessage()
 	mail.SetAddressHeader("From", config.MailConfig["username"], "")
-// 	for _, receiver := range receivers {
-// 		mail.SetHeader("To",
-// 			mail.FormatAddress(receiver, ""),
-// 		)
-// 	}
-	
 	mail.SetHeader("To", receivers...)
 
 	mail.SetHeader("Subject", subject)
