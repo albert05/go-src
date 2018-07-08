@@ -45,6 +45,12 @@ func (item *TransferItem) GetKey() string {
 	return item.Id + "-" + item.InvestId
 }
 
+func (item *TransferItem) String() string {
+	b, _ := json.Marshal(item)
+
+	return string(b)
+}
+
 type TransTmp struct {
 	Code int ``
 	Items []TransferItem `json:"creditItems"`

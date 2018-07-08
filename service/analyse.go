@@ -24,22 +24,24 @@ var CheckRule = map[string]func(item *TransferItem, v float64) bool {
 func (list *TransList) Analyse() {
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
-		if true == item.Check() && !CheckIsSended(item.GetKey()) {
+		if true == item.Check() && !CheckIsSended(item.GetKey(), item.String()) {
 			monitorMsg = append(monitorMsg, item.GetMonitorMsg())
 		}
 	}
+
+	fmt.Println(monitorMsg)
 
 	// is send monitor msg
 	if len(monitorMsg) > 0 {
 		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
 		fmt.Println(msg)
 		// send mail
-		mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
-
+		ret := mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
+		fmt.Println(ret)
 		//send sms
-		for _, phone := range config.SmsReceiverList {
-			tool.Send(phone, msg)
-		}
+		//for _, phone := range config.SmsReceiverList {
+		//	tool.Send(phone, msg)
+		//}
 	}
 }
 
@@ -80,14 +82,14 @@ func CheckRestDays(item *TransferItem, value float64) bool {
 	return true
 }
 
-func CheckIsSended(transId string) bool {
+func CheckIsSended(transId string, data string) bool {
 	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM monitor WHERE trans_id = '%s'", transId))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if len(userInfo) <= 0 {
-		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO monitor(trans_id, created_at) VALUES('%s', %d)", transId, tool.NowTime()))
+		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO monitor(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, tool.NowTime(), data))
 		return false
 	}
 
@@ -96,6 +98,7 @@ func CheckIsSended(transId string) bool {
 
 func RunTA() {
 	list := RetryTransList()
+	fmt.Println(list)
 	list.Analyse()
 }
 
