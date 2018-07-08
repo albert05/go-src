@@ -4,6 +4,7 @@ import (
 	"gopkg.in/gomail.v2"
 	"kd.explorer/config"
 	"strconv"
+	"log"
 )
 
 const defaultPORT = 465 // qq SMTP
@@ -20,6 +21,7 @@ func Send(receivers []string, subject, content string) bool {
 	d := gomail.NewPlainDialer(config.MailConfig["host"], port, config.MailConfig["username"], config.MailConfig["password"])
 
 	if err := d.DialAndSend(mail); err != nil {
+		log.Fatal(err)
 		return false
 	}
 
