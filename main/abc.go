@@ -5,13 +5,13 @@
 package main
 
 import (
-	"kd.explorer/service"
 	"fmt"
 	"flag"
 	"kd.explorer/common"
 	"log"
-	"kd.explorer/mysql"
-	"kd.explorer/tool"
+	"kd.explorer/tools/mysql"
+	"kd.explorer/tools/dates"
+	"kd.explorer/service/abc"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	giftItem, err := service.GetGiftDetail(job.GetAttrString("product_id"))
+	giftItem, err := abc.GetGiftDetail(job.GetAttrString("product_id"))
 	if err != nil {
 		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=2,result='%s' where id=%d", err.Error(), job.GetAttrInt("id")))
 		log.Fatal(err)
@@ -40,11 +40,11 @@ func main() {
 		giftRep := giftItem.RunGift()
 
 		status := 3
-		if service.GiftStatusSUCCESS != giftRep.Status {
+		if abc.GiftStatusSUCCESS != giftRep.Status {
 			status = 2
 		}
 		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", status, giftRep.Result, job.GetAttrInt("id")))
-		tool.SleepSecond(5)
+		dates.SleepSecond(5)
 		i++
 	}
 }

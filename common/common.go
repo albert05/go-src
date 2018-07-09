@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"bytes"
 	"time"
-	"kd.explorer/tool"
 	"kd.explorer/config"
+	"kd.explorer/tools/dates"
 )
 
 const LockBasePATH  = "/tmp/"
@@ -88,13 +88,13 @@ func Exec(cmdStr string) (string, error) {
 }
 
 func Wait(timePoint float64) {
-	currTime := tool.TimeInt2float(tool.CurrentMicro())
+	currTime := dates.TimeInt2float(dates.CurrentMicro())
 	fmt.Println(currTime, timePoint)
 
 	for currTime < timePoint {
 		time.Sleep(DefaultSleepTIME)
 
-		currTime = tool.TimeInt2float(tool.CurrentMicro())
+		currTime = dates.TimeInt2float(dates.CurrentMicro())
 	}
 }
 

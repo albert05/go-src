@@ -1,15 +1,16 @@
-package service
+package kd
 
 import (
-	"kd.explorer/mysql"
+	"kd.explorer/tools/mysql"
 	"fmt"
-	"kd.explorer/tool"
 	"time"
 	"kd.explorer/model"
 	"encoding/json"
 	"log"
 	"strings"
 	"kd.explorer/common"
+	"kd.explorer/tools/http"
+	"kd.explorer/tools/dates"
 )
 
 type TaskResponse struct {
@@ -73,7 +74,7 @@ func runT(task model.MapModel, ch chan<- string) {
 		"prize_number": prizeNumber,
 	}
 
-	body, err := tool.Post(ExchangeURL, params, cookie)
+	body, err := http.Post(ExchangeURL, params, cookie)
 	if err != nil {
 		fmt.Println(err)
 		ch <- err.Error()
@@ -85,7 +86,7 @@ func runT(task model.MapModel, ch chan<- string) {
 
 	status := 3
 	msg := ""
-	if tool.HttpSUCCESS != result.Code {
+	if http.HttpSUCCESS != result.Code {
 		status = 2
 		msg = result.Message
 	}
@@ -96,7 +97,7 @@ func runT(task model.MapModel, ch chan<- string) {
 }
 
 func wait(timePoint float64, taskId int) string {
-	currTime := tool.TimeInt2float(tool.CurrentMicro())
+	currTime := dates.TimeInt2float(dates.CurrentMicro())
 	fmt.Println(currTime, timePoint)
 
 	var imgCode string
@@ -114,7 +115,7 @@ func wait(timePoint float64, taskId int) string {
 			imgCode = strings.Trim(task.GetAttrString("code"), " ")
 		}
 
-		currTime = tool.TimeInt2float(tool.CurrentMicro())
+		currTime = dates.TimeInt2float(dates.CurrentMicro())
 	}
 
 	return imgCode

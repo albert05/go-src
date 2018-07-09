@@ -1,4 +1,5 @@
-package tool
+// 鼎丰所
+package sms
 
 import (
 	"fmt"
@@ -6,6 +7,7 @@ import (
 	"strconv"
 	"encoding/xml"
 	"errors"
+	"kd.explorer/tools/http"
 )
 
 const SendURL = "http://115.29.242.32:8888/sms.aspx?action=send"
@@ -28,7 +30,7 @@ func Send(phone int, content string) error {
 	params := config.SmsConfig
 	params["mobile"] = strconv.Itoa(phone)
 	params["content"] = DefaultSIGN + content
-	body, err := Post(SendURL, params, "")
+	body, err := http.Post(SendURL, params, "")
 	if err != nil {
 		return err
 	}

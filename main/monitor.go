@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
-	"kd.explorer/mysql"
-	"kd.explorer/tool"
+	"kd.explorer/tools/mysql"
 	"time"
 	"kd.explorer/common"
 	"os"
 	"strings"
 	"kd.explorer/config"
+	"kd.explorer/tools/dates"
 )
 
 const LockCODE  = "RUN:MONITOR:EXCHANGE"
@@ -24,13 +24,13 @@ func main() {
 		os.Exit(0)
 	}()
 
-	startTime := tool.NowTime()
+	startTime := dates.NowTime()
 	status := 0
 	workId := `"exchange","abcGift"`
 	currentDir := common.GetPwd()
 	var logPath string
 
-	n := tool.NowTime()
+	n := dates.NowTime()
 	for n - startTime < config.RunDURATION {
 		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id in(%s) limit 10", status, workId)
 		list, err := mysql.Conn.FindAll(sql)
@@ -38,7 +38,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		now := tool.NowDateStr()
+		now := dates.NowDateStr()
 		taskList := make(map[string][]string)
 		for _, task := range list {
 			runTime := task.GetAttrString("run_time")
@@ -64,6 +64,6 @@ func main() {
 
 		time.Sleep(5 * time.Second)
 		fmt.Println("sleep 5 second")
-		n = tool.NowTime()
+		n = dates.NowTime()
 	}
 }

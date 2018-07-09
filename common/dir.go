@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"kd.explorer/tool"
+	"kd.explorer/tools/dates"
 )
 
 // 检查文件或目录是否存在
@@ -150,5 +150,5 @@ func GetLogPath(jobType string) string {
 		return ""
 	}
 
-	return " 1> " + path + tool.NowDateShortStr() + ".log 2>&1"
+	return " 1> " + path + dates.NowDateShortStr() + ".log 2>&1"
 }

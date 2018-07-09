@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
-	"kd.explorer/mysql"
-	"kd.explorer/service"
+	"kd.explorer/tools/mysql"
 	"kd.explorer/model"
 	"flag"
+	"kd.explorer/service/kd"
 )
 
 func main() {
@@ -30,6 +30,6 @@ func main() {
 		runTaskList = append(runTaskList, task)
 	}
 
-	service.GoRunTask(runTaskList)
+	kd.GoRunTask(runTaskList)
 }
 

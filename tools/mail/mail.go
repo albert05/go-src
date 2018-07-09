@@ -7,8 +7,6 @@ import (
 	"log"
 )
 
-const defaultPORT = 465 // qq SMTP
-
 func Send(receivers []string, subject, content string) bool {
 	mail := gomail.NewMessage()
 	mail.SetAddressHeader("From", config.MailConfig["username"], "")

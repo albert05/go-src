@@ -1,7 +1,6 @@
-package service
+package kd
 
 import (
-	"kd.explorer/tool"
 	"encoding/json"
 	"fmt"
 	"kd.explorer/common"
@@ -10,6 +9,8 @@ import (
 	"bytes"
 	"os"
 	"strings"
+	"kd.explorer/tools/http"
+	"kd.explorer/tools/dates"
 )
 
 const CodeURL = "http://deposit.koudailc.com%s"
@@ -46,7 +47,7 @@ func (code *Code) getFileName() string {
 func (code *Code) Refresh() {
 	params := map[string]string{}
 
-	body, err := tool.Post(RefreshURL, params, code.Cookie)
+	body, err := http.Post(RefreshURL, params, code.Cookie)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -60,7 +61,7 @@ func (code *Code) Refresh() {
 
 func (code *Code) CreateImage() {
 	params := map[string]string{}
-	body, err := tool.Post(code.Url, params, code.Cookie)
+	body, err := http.Post(code.Url, params, code.Cookie)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -82,6 +83,6 @@ func (code *Code) CreateImage() {
 
 func (code *Code) RandFileName() {
 	randNum := common.GenerateRangeNum(10000, 99999)
-	dateStr := strconv.FormatInt(tool.NowTime(), 32)
+	dateStr := strconv.FormatInt(dates.NowTime(), 32)
 	code.FileName = ImagePATH + "captcha_" + dateStr + "_" + strconv.Itoa(randNum) + ".png"
 }

@@ -1,10 +1,10 @@
-package service
+package abc
 
 import (
-	"kd.explorer/tool"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"kd.explorer/tools/http"
 )
 
 const GiftListURL = "https://enjoy.abchina.com/yh-web/rights/list"
@@ -37,7 +37,7 @@ type giftResponse struct {
 }
 
 func GetGiftDetail(actNo string) (GiftItem, error) {
-	body, err := tool.PostJson(GiftListURL, DefaultListPARAMS)
+	body, err := http.PostJson(GiftListURL, DefaultListPARAMS)
 	if err != nil {
 		return GiftItem{}, err
 	}
@@ -63,7 +63,7 @@ func (this *GiftItem) SetSession(session string) {
 func (this *GiftItem) RunGift() giftResponse {
 	var result giftResponse
 	params := this.makeParams()
-	body, err := tool.PostJson(GiftURL, params)
+	body, err := http.PostJson(GiftURL, params)
 	if err != nil {
 		return result
 	}

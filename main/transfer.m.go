@@ -1,13 +1,13 @@
 package main
 
 import (
-	"kd.explorer/service"
-	"kd.explorer/tool"
 	"time"
 	"fmt"
 	"kd.explorer/config"
 	"os"
 	"kd.explorer/common"
+	"kd.explorer/tools/dates"
+	"kd.explorer/service/kd"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFER"
@@ -23,15 +23,15 @@ func main() {
 	}()
 
 
-	startTime := tool.NowTime()
+	startTime := dates.NowTime()
 	now := startTime
 
 	for now - startTime < config.RunDURATION {
 		// run analyse
-		service.RunTA()
+		kd.RunTA()
 
 		time.Sleep(10 * time.Second)
 		fmt.Println("sleep 10 second")
-		now = tool.NowTime()
+		now = dates.NowTime()
 	}
 }

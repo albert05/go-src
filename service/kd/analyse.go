@@ -1,4 +1,4 @@
-package service
+package kd
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"strings"
 	"strconv"
 	"kd.explorer/config"
-	"kd.explorer/tool"
-	"kd.explorer/mysql"
-	"kd.explorer/tool/mail"
+	"kd.explorer/tools/mysql"
+	"kd.explorer/tools/mail"
+	"kd.explorer/tools/dates"
 )
 
 const MonitorMaxFEE = 100000  // 10万以下
@@ -40,7 +40,7 @@ func (list *TransList) Analyse() {
 		fmt.Println(ret)
 		//send sms
 		//for _, phone := range config.SmsReceiverList {
-		//	tool.Send(phone, msg)
+		//	tools.Send(phone, msg)
 		//}
 	}
 }
@@ -89,7 +89,7 @@ func CheckIsSended(transId string, data string) bool {
 	}
 
 	if len(userInfo) <= 0 {
-		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO monitor(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, tool.NowTime(), data))
+		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO monitor(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, dates.NowTime(), data))
 		return false
 	}
 

@@ -1,10 +1,10 @@
-package service
+package kd
 
 import (
 	"fmt"
 	"encoding/json"
 	"errors"
-	"kd.explorer/tool"
+	"kd.explorer/tools/http"
 )
 
 type loginResponse struct {
@@ -16,7 +16,7 @@ const LoginURL = "http://deposit.koudailc.com/user/login"
 
 func Login(username, password string) (string, error) {
 	params := fmt.Sprintf("username=%s&password=%s", username, password)
-	body, err := tool.PostWithoutCookie(LoginURL, params)
+	body, err := http.PostWithoutCookie(LoginURL, params)
 	if err != nil {
 		return "", err
 	}
@@ -26,7 +26,7 @@ func Login(username, password string) (string, error) {
 	var result loginResponse
 	json.Unmarshal(body, &result)
 
-	if tool.HttpSUCCESS == result.Code {
+	if http.HttpSUCCESS == result.Code {
 		return result.Sessionid, nil
 	}
 
