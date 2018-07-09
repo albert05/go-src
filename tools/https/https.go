@@ -1,10 +1,11 @@
-package http
+package https
 
 import (
 	"net/http"
 	"net/url"
 	"io/ioutil"
 	"strings"
+	"io"
 )
 
 const DefaultContentTYPE = "application/x-www-form-urlencoded"
@@ -64,6 +65,21 @@ func PostWithoutCookie(url, params string) ([]byte, error) {
 
 func PostJson(url, params string) ([]byte, error) {
 	resp, err := http.Post(url, JsonContentTYPE, strings.NewReader(params))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func PJson(url string, b io.Reader) ([]byte, error) {
+	resp, err := http.Post(url, JsonContentTYPE, b)
 	if err != nil {
 		return nil, err
 	}

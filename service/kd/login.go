@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"errors"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 )
 
 type loginResponse struct {
@@ -12,11 +12,11 @@ type loginResponse struct {
 	Sessionid string ``
 }
 
-const LoginURL = "http://deposit.koudailc.com/user/login"
+const LoginURL = "https://deposit.koudailc.com/user/login"
 
 func Login(username, password string) (string, error) {
 	params := fmt.Sprintf("username=%s&password=%s", username, password)
-	body, err := http.PostWithoutCookie(LoginURL, params)
+	body, err := https.PostWithoutCookie(LoginURL, params)
 	if err != nil {
 		return "", err
 	}
@@ -26,7 +26,7 @@ func Login(username, password string) (string, error) {
 	var result loginResponse
 	json.Unmarshal(body, &result)
 
-	if http.HttpSUCCESS == result.Code {
+	if https.HttpSUCCESS == result.Code {
 		return result.Sessionid, nil
 	}
 

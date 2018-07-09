@@ -9,7 +9,7 @@ import (
 	"log"
 	"strings"
 	"kd.explorer/common"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 	"kd.explorer/tools/dates"
 )
 
@@ -74,7 +74,7 @@ func runT(task model.MapModel, ch chan<- string) {
 		"prize_number": prizeNumber,
 	}
 
-	body, err := http.Post(ExchangeURL, params, cookie)
+	body, err := https.Post(ExchangeURL, params, cookie)
 	if err != nil {
 		fmt.Println(err)
 		ch <- err.Error()
@@ -86,7 +86,7 @@ func runT(task model.MapModel, ch chan<- string) {
 
 	status := 3
 	msg := ""
-	if http.HttpSUCCESS != result.Code {
+	if https.HttpSUCCESS != result.Code {
 		status = 2
 		msg = result.Message
 	}

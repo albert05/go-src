@@ -10,4 +10,8 @@ var TaskList = map[string]map[string]string {
 		"scriptName": "abc",
 		"params": " -l %s ",
 	},
+	"icbcGift": {
+		"scriptName": "icbc",
+		"params": " -l %s ",
+	},
 }

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 )
 
 const GiftListURL = "https://enjoy.abchina.com/yh-web/rights/list"
@@ -37,7 +37,7 @@ type giftResponse struct {
 }
 
 func GetGiftDetail(actNo string) (GiftItem, error) {
-	body, err := http.PostJson(GiftListURL, DefaultListPARAMS)
+	body, err := https.PostJson(GiftListURL, DefaultListPARAMS)
 	if err != nil {
 		return GiftItem{}, err
 	}
@@ -63,7 +63,7 @@ func (this *GiftItem) SetSession(session string) {
 func (this *GiftItem) RunGift() giftResponse {
 	var result giftResponse
 	params := this.makeParams()
-	body, err := http.PostJson(GiftURL, params)
+	body, err := https.PostJson(GiftURL, params)
 	if err != nil {
 		return result
 	}

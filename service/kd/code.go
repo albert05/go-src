@@ -9,12 +9,12 @@ import (
 	"bytes"
 	"os"
 	"strings"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 	"kd.explorer/tools/dates"
 )
 
-const CodeURL = "http://deposit.koudailc.com%s"
-const RefreshURL = "http://deposit.koudailc.com/user/captcha?refresh"
+const CodeURL = "https://deposit.koudailc.com%s"
+const RefreshURL = "https://deposit.koudailc.com/user/captcha?refresh"
 
 var ImagePATH string
 var ImagePrefixPATH string
@@ -47,7 +47,7 @@ func (code *Code) getFileName() string {
 func (code *Code) Refresh() {
 	params := map[string]string{}
 
-	body, err := http.Post(RefreshURL, params, code.Cookie)
+	body, err := https.Post(RefreshURL, params, code.Cookie)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -61,7 +61,7 @@ func (code *Code) Refresh() {
 
 func (code *Code) CreateImage() {
 	params := map[string]string{}
-	body, err := http.Post(code.Url, params, code.Cookie)
+	body, err := https.Post(code.Url, params, code.Cookie)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -5,7 +5,7 @@ import (
 	"kd.explorer/tools/mysql"
 	"encoding/json"
 	"strconv"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 )
 
 const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=5&sortRuleType=2"
@@ -77,7 +77,7 @@ func InitCookie() {
 }
 
 func GetTransferList() (*TransList, error) {
-	body, err := http.Post(TransferListURL, nil, Cookie)
+	body, err := https.Post(TransferListURL, nil, Cookie)
 	if err != nil {
 		return nil, err
 	}

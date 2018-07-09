@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"encoding/xml"
 	"errors"
-	"kd.explorer/tools/http"
+	"kd.explorer/tools/https"
 )
 
-const SendURL = "http://115.29.242.32:8888/sms.aspx?action=send"
+const SendURL = "https://115.29.242.32:8888/sms.aspx?action=send"
 const SmsSuccessSTATUS  = "Success"
 const DefaultSIGN = "【鼎丰所】"
 
@@ -30,7 +30,7 @@ func Send(phone int, content string) error {
 	params := config.SmsConfig
 	params["mobile"] = strconv.Itoa(phone)
 	params["content"] = DefaultSIGN + content
-	body, err := http.Post(SendURL, params, "")
+	body, err := https.Post(SendURL, params, "")
 	if err != nil {
 		return err
 	}
