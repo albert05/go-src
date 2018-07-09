@@ -83,13 +83,13 @@ func CheckRestDays(item *TransferItem, value float64) bool {
 }
 
 func CheckIsSended(transId string, data string) bool {
-	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM monitor WHERE trans_id = '%s'", transId))
+	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM trans_monitor_list WHERE trans_id = '%s'", transId))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if len(userInfo) <= 0 {
-		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO monitor(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, dates.NowTime(), data))
+		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO trans_monitor_list(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, dates.NowTime(), data))
 		return false
 	}
 
