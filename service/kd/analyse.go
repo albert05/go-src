@@ -36,8 +36,11 @@ func (list *TransList) Analyse() {
 		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
 		fmt.Println(msg)
 		// send mail
-		ret := mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
-		fmt.Println(ret)
+		for _, receiver := range config.MailReceiverList {
+			mail.SendSingle(receiver, "高息转让项目提醒", msg)
+		}
+		//ret := mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
+
 		//send sms
 		//for _, phone := range config.SmsReceiverList {
 		//	tools.Send(phone, msg)
