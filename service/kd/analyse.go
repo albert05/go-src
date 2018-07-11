@@ -46,7 +46,8 @@ func (list *TransList) Analyse() {
 				monitorMsg = append(monitorMsg, item.GetMonitorMsg())
 			}
 			if true == item.Check(SecKillLine) {
-				item.RunKILL()
+				//item.RunKILL()
+				item.MultiRunKILL()
 			}
 		}
 	}

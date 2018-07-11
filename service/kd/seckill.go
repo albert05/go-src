@@ -14,6 +14,7 @@ type OrderResp struct {
 	Uid int `json:"uid"`
 }
 
+// 多账号同步秒杀
 func (item *TransferItem) RunKILL() {
 	for _, user := range config.SecKillList {
 		cookie, err := LoginK(user)
@@ -33,9 +34,54 @@ func (item *TransferItem) RunKILL() {
 		json.Unmarshal(body, &result)
 
 		if result.Code == 0 && result.Uid != 0 {
-			fmt.Println(fmt.Sprintf("转让项目invest_id：%s 购买成功", item.InvestId))
+			fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId))
+			return
 		}
 	}
+}
+
+// 多线程多账号异步秒杀
+func (item *TransferItem) MultiRunKILL() {
+	ch := make(chan bool)
+	for _, user := range config.SecKillList {
+		go item.runT(user, ch)
+	}
+
+	for range config.SecKillList {
+		<-ch
+	}
+
+	close(ch)
+}
+
+func (item *TransferItem) runT(user string, ch chan<- bool) {
+	cookie, err := LoginK(user)
+	if err != nil {
+		fmt.Println(err)
+		ch <- false
+		return
+	}
+
+	params := item.MakeOrderParams(user)
+	body, err := https.Post(TransOrderURL, params, cookie)
+	if err != nil {
+		fmt.Println(err)
+		ch <- false
+		return
+	}
+
+	var result OrderResp
+	json.Unmarshal(body, &result)
+
+	if result.Code == 0 && result.Uid != 0 {
+		fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId))
+		ch <- true
+		return
+	}
+
+	fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 失败", user, item.InvestId))
+	ch <- false
+	return
 }
 
 func (item *TransferItem) MakeOrderParams(user string) map[string]string {
