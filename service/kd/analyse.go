@@ -16,7 +16,7 @@ const MonitorMaxRestDAY = 300    // 300天以内
 
 const SecKillMaxFEE = 50000  // 5万以下
 const SecKillMinRATE = 30  // 30% 以上
-const SecKillMaxRestDAY = 90    // 60天以内
+const SecKillMaxRestDAY = 150    // 60天以内
 
 var CheckRule = map[string]func(item *TransferItem, v float64) bool {
 	"fee": CheckFee,
