@@ -41,10 +41,8 @@ var SecKillLine = map[string]float64 {
 func (list *TransList) Analyse() {
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
-		if !CheckIsSended(item.GetKey(), item.String()) {
-			if true == item.Check(MonitorLine) {
-				monitorMsg = append(monitorMsg, item.GetMonitorMsg())
-			}
+		if true == item.Check(MonitorLine) && !CheckIsSended(item.GetKey(), item.String()) {
+			monitorMsg = append(monitorMsg, item.GetMonitorMsg())
 			if true == item.Check(SecKillLine) {
 				//item.RunKILL()
 				item.MultiRunKILL()
