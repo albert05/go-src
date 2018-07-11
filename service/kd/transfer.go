@@ -1,8 +1,6 @@
 package kd
 
 import (
-	"fmt"
-	"kd.explorer/tools/mysql"
 	"encoding/json"
 	"strconv"
 	"kd.explorer/tools/https"
@@ -63,16 +61,9 @@ type TransList struct {
 }
 
 func InitCookie() {
-	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM userinfos WHERE user_key = '%s'", DefaultUserKEY))
-	if err != nil || userInfo == nil {
-		// log
-	}
-
-	username := userInfo.GetAttrString("user_name")
-	password := userInfo.GetAttrString("password")
-	Cookie, err = Login(username, password)
-	if err != nil {
-		//
+	cookie, err := LoginK(DefaultUserKEY)
+	if err == nil {
+		Cookie = cookie
 	}
 }
 

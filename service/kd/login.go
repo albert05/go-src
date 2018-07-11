@@ -32,3 +32,16 @@ func Login(username, password string) (string, error) {
 
 	return "", errors.New("login request result failed")
 }
+
+func LoginK(user string) (string, error) {
+	userInfo := FindUser(user)
+
+	username := userInfo.GetAttrString("user_name")
+	password := userInfo.GetAttrString("password")
+	cookie, err := Login(username, password)
+	if err != nil {
+		return "", err
+	}
+
+	return cookie, nil
+}

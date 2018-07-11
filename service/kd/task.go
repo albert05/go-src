@@ -38,15 +38,7 @@ func runT(task model.MapModel, ch chan<- string) {
 	fmt.Println(fmt.Sprintf("taskID %d start work", taskId))
 	userKey := task.GetAttrString("user_key")
 
-	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM userinfos WHERE user_key = '%s'", userKey))
-	if err != nil || len(userInfo) <= 0 {
-		ch <- "get user info failed"
-		return
-	}
-
-	username := userInfo.GetAttrString("user_name")
-	password := userInfo.GetAttrString("password")
-	cookie, err := Login(username, password)
+	cookie, err := LoginK(userKey)
 	if err != nil {
 		ch <- "login failed"
 		return
