@@ -15,7 +15,7 @@ type OrderResp struct {
 }
 
 // 多账号同步秒杀
-func (item *TransferItem) RunKILL() {
+func (item *TransferItem) RunKill() {
 	for _, user := range config.SecKillList {
 		cookie, err := LoginK(user)
 		if err != nil {
@@ -41,7 +41,7 @@ func (item *TransferItem) RunKILL() {
 }
 
 // 多线程多账号异步秒杀
-func (item *TransferItem) MultiRunKILL() {
+func (item *TransferItem) SyncRunKill() {
 	ch := make(chan bool)
 	for _, user := range config.SecKillList {
 		go item.runT(user, ch)

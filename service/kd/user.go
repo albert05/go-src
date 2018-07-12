@@ -1,9 +1,9 @@
 package kd
 
 import (
-	"kd.explorer/model"
 	"fmt"
 	"kd.explorer/tools/mysql"
+	"kd.explorer/model"
 )
 
 func FindUser(user string) (model.MapModel) {
