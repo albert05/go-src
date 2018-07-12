@@ -24,12 +24,12 @@ var MonitorRule *Rule
 var SecKillRule *Rule
 
 func init() {
-	MonitorRule := InitRule()
+	MonitorRule = InitRule()
 	MonitorRule.SetFee(MonitorMaxFEE)
 	MonitorRule.SetRate(MonitorMinRATE)
 	MonitorRule.SetRestdays(MonitorMaxRestDAY)
 
-	SecKillRule := InitRule()
+	SecKillRule = InitRule()
 	SecKillRule.SetFee(SecKillMaxFEE)
 	SecKillRule.SetRate(SecKillMinRATE)
 	SecKillRule.SetRestdays(SecKillMaxRestDAY)
