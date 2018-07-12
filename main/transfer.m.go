@@ -30,8 +30,8 @@ func main() {
 		// run analyse
 		kd.RunTA()
 
-		time.Sleep(5 * time.Second)
-		fmt.Println("sleep 5 second")
+		time.Sleep(1 * time.Second)
+		fmt.Println("sleep 1 second")
 		now = dates.NowTime()
 	}
 }
