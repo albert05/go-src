@@ -9,7 +9,7 @@ import (
 	"kd.explorer/service/kd"
 )
 
-const LockTransferCODE = "RUN.MONITOR.TRANSFER"
+const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
 
 func main() {
 	if !common.Lock(LockTransferCODE) {
