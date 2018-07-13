@@ -9,13 +9,21 @@ import (
 	"fmt"
 	"os"
 	"kd.explorer/common"
+	"strconv"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
 
 func main() {
+	var t string
 	flag.StringVar(&config.CurUser, "u", "", "current user")
+	flag.StringVar(&t, "t", "", "sleep time")
 	flag.Parse()
+
+	st := 1
+	if t != "" {
+		st, _ = strconv.Atoi(t)
+	}
 
 	code := LockTransferCODE + config.CurUser
 	if !common.Lock(code) {
@@ -34,8 +42,8 @@ func main() {
 		// run analyse
 		kd.RunTA()
 
-		time.Sleep(1 * time.Second)
-		fmt.Println("sleep 1 second")
+		time.Sleep(time.Duration(st) * time.Second)
+		fmt.Println(fmt.Sprintf("sleep %d second", st))
 		now = dates.NowTime()
 	}
 }
