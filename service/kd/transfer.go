@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"kd.explorer/tools/https"
 	"kd.explorer/config"
+	"fmt"
 )
 
 const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=2&sortRuleType=2"
@@ -85,6 +86,10 @@ func GetTransferList() (*TransList, error) {
 
 	var result TransList
 	json.Unmarshal(body, &result)
+
+	if TransLoginSuccessSTATUS != result.IsLogin {
+		fmt.Println(string(body))
+	}
 
 	result.Cookie = Cookie
 	return &result, nil
