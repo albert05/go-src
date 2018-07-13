@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"kd.explorer/tools/https"
+	"kd.explorer/model"
 )
 
 type loginResponse struct {
@@ -34,7 +35,7 @@ func Login(username, password string) (string, error) {
 }
 
 func LoginK(user string) (string, error) {
-	userInfo := FindUser(user)
+	userInfo := model.FindUser(user)
 
 	username := userInfo.GetAttrString("user_name")
 	password := userInfo.GetAttrString("password")

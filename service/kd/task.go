@@ -1,16 +1,16 @@
 package kd
 
 import (
-	"kd.explorer/tools/mysql"
 	"fmt"
 	"time"
 	"kd.explorer/model"
 	"encoding/json"
-	"log"
 	"strings"
 	"kd.explorer/common"
 	"kd.explorer/tools/https"
 	"kd.explorer/tools/dates"
+	"strconv"
+	"kd.explorer/tools/mysql"
 )
 
 type TaskResponse struct {
@@ -20,7 +20,7 @@ type TaskResponse struct {
 
 const ExchangeURL = "https://deposit.koudailc.com/user-order-form/convert"
 
-func GoRunTask(taskList []model.MapModel) {
+func GoRunTask(taskList []mysql.MapModel) {
 	ch := make(chan string)
 	for _, task := range taskList {
 		go runT(task, ch)
@@ -33,7 +33,7 @@ func GoRunTask(taskList []model.MapModel) {
 	close(ch)
 }
 
-func runT(task model.MapModel, ch chan<- string) {
+func runT(task mysql.MapModel, ch chan<- string) {
 	taskId := task.GetAttrInt("id")
 	fmt.Println(fmt.Sprintf("taskID %d start work", taskId))
 	userKey := task.GetAttrString("user_key")
@@ -52,7 +52,9 @@ func runT(task model.MapModel, ch chan<- string) {
 
 	fmt.Println(cookie, code.getFileName())
 
-	mysql.Conn.Exec(fmt.Sprintf("update tasks set img_url='%s' where id=%d", code.getFileName(), taskId))
+	model.UpdateTask(taskId, map[string]string {
+		"img_url": code.getFileName(),
+	})
 
 	timePoint := task.GetAttrFloat("time_point")
 	imgCode := wait(timePoint, taskId)
@@ -82,7 +84,10 @@ func runT(task model.MapModel, ch chan<- string) {
 		status = 2
 		msg = result.Message
 	}
-	mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", status, msg, taskId))
+	model.UpdateTask(taskId, map[string]string {
+		"status": strconv.Itoa(status),
+		"result": msg,
+	})
 
 	fmt.Println(userKey + " -- " + string(body))
 	ch <- "success"
@@ -98,11 +103,7 @@ func wait(timePoint float64, taskId int) string {
 		time.Sleep(common.DefaultSleepTIME)
 
 		if imgCode == "" {
-			sql := fmt.Sprintf("SELECT * FROM tasks WHERE id =%d", taskId)
-			task, err := mysql.Conn.FindOne(sql)
-			if err != nil {
-				log.Fatal(err)
-			}
+			task := model.FindTask(taskId)
 
 			imgCode = strings.Trim(task.GetAttrString("code"), " ")
 		}

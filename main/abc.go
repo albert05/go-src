@@ -9,25 +9,26 @@ import (
 	"flag"
 	"kd.explorer/common"
 	"log"
-	"kd.explorer/tools/mysql"
 	"kd.explorer/tools/dates"
 	"kd.explorer/service/abc"
+	"kd.explorer/model"
+	"strconv"
 )
 
 func main() {
-	var jobList string
-	flag.StringVar(&jobList, "l", "", "jobList")
+	var ids string
+	flag.StringVar(&ids, "l", "", "job")
 	flag.Parse()
 
-	sql := fmt.Sprintf("SELECT * FROM tasks WHERE id in (%s)", jobList)
-	job, err := mysql.Conn.FindOne(sql)
-	if err != nil {
-		log.Fatal(err)
-	}
+	id ,_ := strconv.Atoi(ids)
+	job := model.FindTask(id)
 
 	giftItem, err := abc.GetGiftDetail(job.GetAttrString("product_id"))
 	if err != nil {
-		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=2,result='%s' where id=%d", err.Error(), job.GetAttrInt("id")))
+		model.UpdateTask(job.GetAttrInt("id"), map[string]string {
+			"status": "2",
+			"result": err.Error(),
+		})
 		log.Fatal(err)
 	}
 
@@ -43,7 +44,11 @@ func main() {
 		if abc.GiftStatusSUCCESS != giftRep.Status {
 			status = 2
 		}
-		mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", status, giftRep.Result, job.GetAttrInt("id")))
+
+		model.UpdateTask(job.GetAttrInt("id"), map[string]string {
+			"status": fmt.Sprintf("%d", status),
+			"result": giftRep.Result,
+		})
 		dates.SleepSecond(5)
 		i++
 	}

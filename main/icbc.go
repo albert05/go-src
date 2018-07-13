@@ -3,23 +3,19 @@ package main
 import (
 	"kd.explorer/service/icbc"
 	"flag"
-	"fmt"
-	"log"
 	"kd.explorer/tools/dates"
-	"kd.explorer/tools/mysql"
 	"kd.explorer/common"
+	"strconv"
+	"kd.explorer/model"
 )
 
 func main()  {
-	var jobList string
-	flag.StringVar(&jobList, "l", "", "jobList")
+	var ids string
+	flag.StringVar(&ids, "l", "", "job")
 	flag.Parse()
 
-	sql := fmt.Sprintf("SELECT * FROM tasks WHERE id in (%s)", jobList)
-	job, err := mysql.Conn.FindOne(sql)
-	if err != nil {
-		log.Fatal(err)
-	}
+	id ,_ := strconv.Atoi(ids)
+	job := model.FindTask(id)
 
 	actId := job.GetAttrString("product_id")
 	cookie := job.GetAttrString("code")
@@ -31,7 +27,10 @@ func main()  {
 	for i < 100 {
 		result := gift.RUN()
 		if result {
-			mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", 3, "success", job.GetAttrInt("id")))
+			model.UpdateTask(job.GetAttrInt("id"), map[string]string {
+				"status": "3",
+				"result": "success",
+			})
 			break
 		}
 
@@ -39,5 +38,8 @@ func main()  {
 		i++
 	}
 
-	mysql.Conn.Exec(fmt.Sprintf("update tasks set status=%d,result='%s' where id=%d", 2, "failed", job.GetAttrInt("id")))
+	model.UpdateTask(job.GetAttrInt("id"), map[string]string {
+		"status": "2",
+		"result": "failed",
+	})
 }

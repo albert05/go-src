@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"kd.explorer/tools/mysql"
 	"kd.explorer/model"
 	"flag"
@@ -17,15 +16,9 @@ func main() {
 	flag.Parse()
 
 	fmt.Println(jobList)
+	list := model.FindTaskListByIds(jobList)
 
-	sql := fmt.Sprintf("SELECT * FROM tasks WHERE id in (%s)", jobList)
-	fmt.Println(mysql.Conn)
-	list, err := mysql.Conn.FindAll(sql)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	runTaskList := make([]model.MapModel, 0)
+	runTaskList := make([]mysql.MapModel, 0)
 	for _, task := range list {
 		runTaskList = append(runTaskList, task)
 	}

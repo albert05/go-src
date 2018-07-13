@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"kd.explorer/tools/mysql"
 	"time"
 	"kd.explorer/common"
 	"os"
-	"strings"
 	"kd.explorer/config"
 	"kd.explorer/tools/dates"
+	"kd.explorer/model"
+	"strings"
 )
 
 const LockCODE  = "RUN:MONITOR:EXCHANGE"
@@ -32,11 +31,7 @@ func main() {
 
 	n := dates.NowTime()
 	for n - startTime < config.RunDURATION {
-		sql := fmt.Sprintf("SELECT * FROM tasks WHERE status =%d and work_id in(%s) limit 10", status, workId)
-		list, err := mysql.Conn.FindAll(sql)
-		if err != nil {
-			log.Fatal(err)
-		}
+		list := model.FindTaskListByStatus(status, workId)
 
 		now := dates.NowDateStr()
 		taskList := make(map[string][]string)
@@ -54,10 +49,11 @@ func main() {
 		if len(taskList) > 0 {
 			for workId, list := range taskList {
 				logPath = common.GetLogPath(workId)
-				ids := strings.Join(list, ",")
-				mysql.Conn.Exec(fmt.Sprintf("update tasks set status=1 where id in (%s)", ids))
+				model.UpdateMultiTask(list, map[string]string {
+					"status": "1",
+				})
 
-				cmdStr := common.GetCmdStr(workId, map[string]string {"ids": ids, "curDir": currentDir, "logDir": logPath})
+				cmdStr := common.GetCmdStr(workId, map[string]string {"ids": strings.Join(list, ","), "curDir": currentDir, "logDir": logPath})
 				common.Cmd(cmdStr)
 			}
 		}
