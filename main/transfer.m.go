@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"kd.explorer/config"
-	"os"
-	"kd.explorer/common"
 	"kd.explorer/tools/dates"
 	"kd.explorer/service/kd"
 	"flag"
+	"time"
+	"fmt"
+	"os"
+	"kd.explorer/common"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
@@ -33,8 +34,8 @@ func main() {
 		// run analyse
 		kd.RunTA()
 
-		//time.Sleep(1 * time.Second)
-		//fmt.Println("sleep 1 second")
+		time.Sleep(1 * time.Second)
+		fmt.Println("sleep 1 second")
 		now = dates.NowTime()
 	}
 }
