@@ -38,12 +38,12 @@ func init() {
 func (list *TransList) Analyse() {
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
+		if true == SecKillRule.Check(item) {
+			//item.RunKill()
+			item.SyncRunKill()
+		}
 		if true == MonitorRule.Check(item) && !CheckIsSended(item.GetKey(), item.String()) {
 			monitorMsg = append(monitorMsg, item.GetMonitorMsg())
-			if true == SecKillRule.Check(item) {
-				//item.RunKill()
-				item.SyncRunKill()
-			}
 		}
 	}
 
