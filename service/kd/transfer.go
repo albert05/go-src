@@ -62,7 +62,11 @@ type TransList struct {
 	Cookie string
 }
 
-func InitCookie() {
+func InitCookie(isFlush bool) {
+	if !isFlush && Cookie != "" {
+		return
+	}
+
 	user := DefaultUserKEY
 	if config.CurUser != "" {
 		user = config.CurUser
@@ -88,8 +92,9 @@ func GetTransferList() (*TransList, error) {
 
 func RetryTransList() *TransList {
 	var i = 0
+	isFlush := false
 	for i < RetryCNT {
-		InitCookie()
+		InitCookie(isFlush)
 		list, err := GetTransferList()
 		if err != nil {
 			return nil
@@ -99,6 +104,7 @@ func RetryTransList() *TransList {
 			return list
 		}
 		i++
+		isFlush = true
 	}
 
 	return nil
