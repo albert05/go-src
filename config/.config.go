@@ -24,3 +24,9 @@ var MailConfig = map[string]string {
 var MailReceiverList = []string {
 	"***",
 }
+
+var SecKillList = []string {
+	"***",
+}
+
+var CurUser string

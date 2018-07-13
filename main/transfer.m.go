@@ -7,20 +7,24 @@ import (
 	"kd.explorer/common"
 	"kd.explorer/tools/dates"
 	"kd.explorer/service/kd"
+	"flag"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
 
 func main() {
-	if !common.Lock(LockTransferCODE) {
-		fmt.Println(LockTransferCODE + " is running...")
+	flag.StringVar(&config.CurUser, "u", "", "current user")
+	flag.Parse()
+
+	code := LockTransferCODE + config.CurUser
+	if !common.Lock(code) {
+		fmt.Println(code + " is running...")
 		os.Exit(0)
 	}
 	defer func() {
-		common.UnLock(LockTransferCODE)
+		common.UnLock(code)
 		os.Exit(0)
 	}()
-
 
 	startTime := dates.NowTime()
 	now := startTime
