@@ -1,7 +1,6 @@
 package main
 
 import (
-	"time"
 	"fmt"
 	"kd.explorer/config"
 	"os"
@@ -30,8 +29,8 @@ func main() {
 		// run analyse
 		kd.RunTA()
 
-		time.Sleep(1 * time.Second)
-		fmt.Println("sleep 1 second")
+		//time.Sleep(1 * time.Second)
+		//fmt.Println("sleep 1 second")
 		now = dates.NowTime()
 	}
 }
