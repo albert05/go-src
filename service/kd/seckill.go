@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"kd.explorer/tools/https"
 	"encoding/json"
+	"kd.explorer/tools/mail"
 )
 
 const TransOrderURL = "https://deposit.koudailc.com/credit/apply-assignment"
@@ -27,7 +28,11 @@ func (item *TransferItem) RunKill(cookie string) {
 	json.Unmarshal(body, &result)
 
 	if result.Code == 0 && result.Uid != 0 {
-		fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", config.CurUser, item.InvestId))
+		msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", config.CurUser, item.InvestId)
+		fmt.Println(msg)
+		for _, receiver := range config.MailReceiverList {
+			mail.SendSingle(receiver, "高息转让项目抢购成功提醒", msg)
+		}
 		return
 	}
 }
@@ -66,7 +71,11 @@ func (item *TransferItem) runT(user string, ch chan<- bool) {
 	json.Unmarshal(body, &result)
 
 	if result.Code == 0 && result.Uid != 0 {
-		fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId))
+		msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId)
+		fmt.Println(msg)
+		for _, receiver := range config.MailReceiverList {
+			mail.SendSingle(receiver, "高息转让项目抢购成功提醒", msg)
+		}
 		ch <- true
 		return
 	}

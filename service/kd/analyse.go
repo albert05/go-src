@@ -30,9 +30,9 @@ func init() {
 	MonitorRule.SetRestdays(MonitorMaxRestDAY)
 
 	SecKillRule = InitRule()
-	SecKillRule.SetFee(SecKillMaxFEE)
-	SecKillRule.SetRate(SecKillMinRATE)
-	SecKillRule.SetRestdays(SecKillMaxRestDAY)
+	SecKillRule.SetFee(config.SecKillFee)
+	SecKillRule.SetRate(config.SecKillRate)
+	SecKillRule.SetRestdays(config.SecKillRestDay)
 }
 
 func (list *TransList) Analyse() {
