@@ -28,7 +28,7 @@ func main() {
 		st, _ = strconv.Atoi(t)
 	}
 
-	code := LockTransferCODE + config.CurUser
+	code := fmt.Sprintf(LockTransferCODE + "_%s_%f_%f_%d", config.CurUser, config.SecKillFee, config.SecKillRate, config.SecKillRestDay)
 	if !common.Lock(code) {
 		fmt.Println(code + " is running...")
 		os.Exit(0)
