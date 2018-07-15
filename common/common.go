@@ -9,9 +9,9 @@ import (
 	"time"
 	"kd.explorer/config"
 	"kd.explorer/tools/dates"
+	"runtime"
 )
 
-const LockBasePATH  = "/tmp/"
 const DefaultSleepTIME = time.Millisecond * 10
 
 var Config map[string]string
@@ -22,6 +22,15 @@ func initConfig(path string) {
 
 func GetConfig(key string) {
 
+}
+
+func GetLockPath() string {
+	path := "/tmp/"
+	if "windows" == runtime.GOOS {
+		path = "E:\\data\\"
+	}
+
+	return path
 }
 
 func Substr(s string, pos, length int) string {
@@ -37,7 +46,7 @@ func Substr(s string, pos, length int) string {
 }
 
 func Lock(name string) bool {
-	fileName := fmt.Sprintf(LockBasePATH + "%s.lock", name)
+	fileName := fmt.Sprintf(GetLockPath() + "%s.lock", name)
 	if IsExist(fileName) {
 		return false
 	}
@@ -52,7 +61,7 @@ func Lock(name string) bool {
 }
 
 func UnLock(name string) bool {
-	fileName := fmt.Sprintf(LockBasePATH + "%s.lock", name)
+	fileName := fmt.Sprintf(GetLockPath() + "%s.lock", name)
 	if !IsExist(fileName) {
 		return false
 	}

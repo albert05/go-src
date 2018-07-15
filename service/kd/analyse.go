@@ -2,10 +2,12 @@ package kd
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"kd.explorer/config"
+	"kd.explorer/tools/mysql"
 	"kd.explorer/tools/mail"
-	"kd.explorer/model"
+	"kd.explorer/tools/dates"
 )
 
 // 告警线
@@ -28,17 +30,20 @@ func init() {
 	MonitorRule.SetRestdays(MonitorMaxRestDAY)
 
 	SecKillRule = InitRule()
-	SecKillRule.SetFee(SecKillMaxFEE)
-	SecKillRule.SetRate(SecKillMinRATE)
-	SecKillRule.SetRestdays(SecKillMaxRestDAY)
+	SecKillRule.SetFee(config.SecKillFee)
+	SecKillRule.SetRate(config.SecKillRate)
+	SecKillRule.SetRestdays(config.SecKillRestDay)
 }
 
 func (list *TransList) Analyse() {
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
 		if true == SecKillRule.Check(item) {
-			//item.RunKill()
-			item.SyncRunKill()
+			if list.Cookie == "" {
+				item.SyncRunKill()
+			} else {
+				item.RunKill(list.Cookie)
+			}
 		}
 		if true == MonitorRule.Check(item) && !CheckIsSended(item.GetKey(), item.String()) {
 			monitorMsg = append(monitorMsg, item.GetMonitorMsg())
@@ -69,10 +74,13 @@ func (item *TransferItem) GetMonitorMsg() string {
 }
 
 func CheckIsSended(transId string, data string) bool {
-	monitorInfo := model.FindMRecord(transId)
+	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM trans_monitor_list WHERE trans_id = '%s'", transId))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	if len(monitorInfo) <= 0 {
-		model.InsertMRecord(transId, data)
+	if len(userInfo) <= 0 {
+		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO trans_monitor_list(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, dates.NowTime(), data))
 		return false
 	}
 

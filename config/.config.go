@@ -24,3 +24,13 @@ var MailConfig = map[string]string {
 var MailReceiverList = []string {
 	"***",
 }
+
+var SecKillList = []string {
+	"***",
+}
+
+var CurUser string
+
+var SecKillFee float64
+var SecKillRate float64
+var SecKillRestDay int

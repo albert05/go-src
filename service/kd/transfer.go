@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"strconv"
 	"kd.explorer/tools/https"
+	"kd.explorer/config"
+	"fmt"
 )
 
-const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=5&sortRuleType=2"
-const DefaultUserKEY = "cwf"
+const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=2&sortRuleType=2"
+const DefaultUserKEY = "cwf_2551"
 const TransLoginSuccessSTATUS = 1
 const RetryCNT = 3
 
@@ -58,10 +60,19 @@ type TransList struct {
 	Code int
 	List TransTmp `json:"recentlyPublishedItems"`
 	IsLogin int `json:"is_login"`
+	Cookie string
 }
 
-func InitCookie() {
-	cookie, err := LoginK(DefaultUserKEY)
+func InitCookie(isFlush bool) {
+	if !isFlush && Cookie != "" {
+		return
+	}
+
+	user := DefaultUserKEY
+	if config.CurUser != "" {
+		user = config.CurUser
+	}
+	cookie, err := LoginK(user)
 	if err == nil {
 		Cookie = cookie
 	}
@@ -76,13 +87,19 @@ func GetTransferList() (*TransList, error) {
 	var result TransList
 	json.Unmarshal(body, &result)
 
+	if TransLoginSuccessSTATUS != result.IsLogin {
+		fmt.Println(string(body))
+	}
+
+	result.Cookie = Cookie
 	return &result, nil
 }
 
 func RetryTransList() *TransList {
 	var i = 0
+	isFlush := false
 	for i < RetryCNT {
-		InitCookie()
+		InitCookie(isFlush)
 		list, err := GetTransferList()
 		if err != nil {
 			return nil
@@ -92,6 +109,7 @@ func RetryTransList() *TransList {
 			return list
 		}
 		i++
+		isFlush = true
 	}
 
 	return nil
