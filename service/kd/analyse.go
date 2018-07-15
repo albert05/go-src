@@ -2,12 +2,10 @@ package kd
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"kd.explorer/config"
-	"kd.explorer/tools/mysql"
 	"kd.explorer/tools/mail"
-	"kd.explorer/tools/dates"
+	"kd.explorer/model"
 )
 
 // 告警线
@@ -74,13 +72,10 @@ func (item *TransferItem) GetMonitorMsg() string {
 }
 
 func CheckIsSended(transId string, data string) bool {
-	userInfo, err := mysql.Conn.FindOne(fmt.Sprintf("SELECT * FROM trans_monitor_list WHERE trans_id = '%s'", transId))
-	if err != nil {
-		log.Fatal(err)
-	}
+	monitorInfo := model.FindMRecord(transId)
 
-	if len(userInfo) <= 0 {
-		mysql.Conn.Exec(fmt.Sprintf("INSERT INTO trans_monitor_list(trans_id, created_at, data) VALUES('%s', %d, '%s')", transId, dates.NowTime(), data))
+	if len(monitorInfo) <= 0 {
+		model.InsertMRecord(transId, data)
 		return false
 	}
 

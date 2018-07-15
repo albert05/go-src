@@ -6,6 +6,7 @@ import (
 	"kd.explorer/tools/https"
 	"encoding/json"
 	"kd.explorer/tools/mail"
+	"kd.explorer/model"
 )
 
 const TransOrderURL = "https://deposit.koudailc.com/credit/apply-assignment"
@@ -86,7 +87,7 @@ func (item *TransferItem) runT(user string, ch chan<- bool) {
 }
 
 func (item *TransferItem) MakeOrderParams(user string) map[string]string {
-	userInfo := FindUser(user)
+	userInfo := model.FindUser(user)
 	paypasswd := userInfo.GetAttrString("pay_passwd")
 
 	return map[string]string{
