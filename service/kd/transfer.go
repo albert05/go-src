@@ -42,7 +42,7 @@ func (item *TransferItem) GetRate() float64 {
 }
 
 func (item *TransferItem) GetKey() string {
-	return item.Id + "-" + item.InvestId
+	return item.Id + "-" + item.InvestId + "-" + config.CurUser
 }
 
 func (item *TransferItem) String() string {
@@ -102,6 +102,7 @@ func RetryTransList() *TransList {
 		InitCookie(isFlush)
 		list, err := GetTransferList()
 		if err != nil {
+			fmt.Println(err)
 			return nil
 		}
 

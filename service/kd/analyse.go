@@ -84,7 +84,9 @@ func CheckIsSended(transId string, data string) bool {
 
 func RunTA() {
 	list := RetryTransList()
-	fmt.Println(list)
-	list.Analyse()
+	if list != nil {
+		fmt.Println(list)
+		list.Analyse()
+	}
 }
 
