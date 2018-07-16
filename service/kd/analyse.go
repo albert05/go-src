@@ -23,7 +23,7 @@ const SecKillMaxRestDAY = 150    // 60天以内
 var MonitorRule *Rule
 var SecKillRules *Rules
 
-func init() {
+func Init() {
 	MonitorRule = InitRule()
 	MonitorRule.SetFee(MonitorMaxFEE)
 	MonitorRule.SetRate(MonitorMinRATE)
@@ -93,6 +93,7 @@ func CheckIsSended(transId string, data string) bool {
 }
 
 func RunTA() {
+	Init()
 	list := RetryTransList()
 	if list != nil {
 		fmt.Println(list)
