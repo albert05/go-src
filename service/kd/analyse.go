@@ -56,9 +56,6 @@ func (list *TransList) Analyse() {
 		fmt.Println(msg)
 		// send mail
 		email := model.FindUser(config.CurUser).GetAttrString("email")
-		if email != config.AdminMailer {
-			mail.SendSingle(config.AdminMailer, "高息转让项目提醒", msg)
-		}
 		mail.SendSingle(email, "高息转让项目提醒", msg)
 	}
 }
