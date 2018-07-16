@@ -8,9 +8,23 @@ import (
 const RuleFuncPrefix  = "CheckI"
 
 type Rule struct {
-	Fee float64
-	Rate float64
-	Restdays int
+	Fee float64 `json:"fee"`
+	Rate float64 `json:"rate"`
+	Restdays int `json:"restdays"`
+}
+
+type Rules struct {
+	R []*Rule
+}
+
+func (rules *Rules) Check(item TransferItem) bool {
+	for _, rule := range rules.R {
+		if rule.Check(item) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func InitRule() *Rule {

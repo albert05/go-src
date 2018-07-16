@@ -21,6 +21,7 @@ func (item *TransferItem) RunKill(cookie string) {
 	params := item.MakeOrderParams(config.CurUser)
 	body, err := https.Post(TransOrderURL, params, cookie)
 	if err != nil {
+		mail.SendSingle(config.AdminMailer, "高息转让项目提醒", err.Error())
 		fmt.Println(err)
 		return
 	}
