@@ -6,11 +6,13 @@ import (
 	"io/ioutil"
 	"strings"
 	"io"
+	"time"
 )
 
 const DefaultContentTYPE = "application/x-www-form-urlencoded"
 const JsonContentTYPE = "application/json"
 const HttpSUCCESS = 0
+const Timeout = 5
 
 func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 	v := url.Values{}
@@ -20,7 +22,11 @@ func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 
 	//form数据编码
 	body := ioutil.NopCloser(strings.NewReader(v.Encode()))
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: &http.Transport{
+			ResponseHeaderTimeout: time.Second * Timeout,
+		},
+	}
 	request, err := http.NewRequest("POST", uri, body)
 	if err != nil {
 		return nil, err
@@ -36,6 +42,9 @@ func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 
 	//发送请求
 	resp, err := client.Do(request)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 
 	content, err := ioutil.ReadAll(resp.Body)

@@ -28,14 +28,13 @@ func (item *TransferItem) RunKill(cookie string) {
 	var result OrderResp
 	json.Unmarshal(body, &result)
 
-	if result.Code == 0 && result.Uid != 0 {
-		msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", config.CurUser, item.InvestId)
-		fmt.Println(msg)
-		for _, receiver := range config.MailReceiverList {
-			mail.SendSingle(receiver, "高息转让项目抢购成功提醒", msg)
-		}
-		return
+	msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 结果：%s", config.CurUser, item.InvestId, string(body))
+	fmt.Println(msg)
+	email := model.FindUser(config.CurUser).GetAttrString("email")
+	if email != config.AdminMailer {
+		mail.SendSingle(config.AdminMailer, "高息转让项目提醒", msg)
 	}
+	mail.SendSingle(email, "高息转让项目抢购提醒", msg)
 }
 
 // 多线程多账号异步秒杀

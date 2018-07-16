@@ -55,15 +55,8 @@ func (list *TransList) Analyse() {
 		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
 		fmt.Println(msg)
 		// send mail
-		for _, receiver := range config.MailReceiverList {
-			mail.SendSingle(receiver, "高息转让项目提醒", msg)
-		}
-		//ret := mail.Send(config.MailReceiverList, "高息转让项目提醒", msg)
-
-		//send sms
-		//for _, phone := range config.SmsReceiverList {
-		//	tools.Send(phone, msg)
-		//}
+		email := model.FindUser(config.CurUser).GetAttrString("email")
+		mail.SendSingle(email, "高息转让项目提醒", msg)
 	}
 }
 
@@ -84,7 +77,9 @@ func CheckIsSended(transId string, data string) bool {
 
 func RunTA() {
 	list := RetryTransList()
-	fmt.Println(list)
-	list.Analyse()
+	if list != nil {
+		fmt.Println(list)
+		list.Analyse()
+	}
 }
 
