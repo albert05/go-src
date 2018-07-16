@@ -2,6 +2,7 @@ package config
 
 const DSN  = "user:pwd@tcp(127.0.0.1:3306)/db"
 const RunDURATION = 290
+const AdminMailer = "fengelom@163.com"
 
 var SmsConfig = map[string]string {
 	"userid": "***",
