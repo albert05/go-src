@@ -21,6 +21,7 @@ type TransferItem struct {
 	AssignFee string `json:"assign_fee"`
 	AssignRate string `json:"assign_rate"`
 	RestDays int `json:"rest_days"`
+	UpdatedAt int64 `json:"updated_at"`
 }
 
 func (item *TransferItem) GetFee() float64 {

@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"kd.explorer/tools/dates"
+	"runtime"
+	"time"
 )
 
 // 检查文件或目录是否存在
@@ -121,7 +123,7 @@ func GetAllFilesByDir(dir string) []string {
 // param string suffix 文件后缀 如 .txt
 // return slice
 func GetAllFileByDirSuffix(dir string, suffix string) []string {
-	pattern := GetFilePath(dir) + "/*" + suffix
+	pattern := GetFilePath(dir) + GetSysDirSuffix() + "*" + suffix
 	files, err := filepath.Glob(pattern)
 	if err != nil {
 		return nil
@@ -130,12 +132,21 @@ func GetAllFileByDirSuffix(dir string, suffix string) []string {
 	return files
 }
 
+func GetSysDirSuffix() string {
+	suffix := "/"
+	if "windows" == runtime.GOOS {
+		suffix = "\\"
+	}
+
+	return suffix
+}
+
 // 获取目录指定匹配模式的所有文件
 // param string dir
 // param string pattern 匹配模式
 // return slice
 func GetAllFileByPattern(dir string, pattern string) []string {
-	filePattern := GetFilePath(dir) + "/" + pattern
+	filePattern := GetFilePath(dir) + GetSysDirSuffix() + pattern
 	files, err := filepath.Glob(filePattern)
 	if err != nil {
 		return nil
@@ -151,4 +162,19 @@ func GetLogPath(jobType string) string {
 	}
 
 	return " 1> " + path + dates.NowDateShortStr() + ".log 2>&1"
+}
+
+func GetFileModTime(file string) int64 {
+	f, err := os.Open(file)
+	if err != nil {
+		return time.Now().Unix()
+	}
+	defer f.Close()
+
+	fi, err := f.Stat()
+	if err != nil {
+		return time.Now().Unix()
+	}
+
+	return fi.ModTime().Unix()
 }
