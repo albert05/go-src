@@ -35,6 +35,8 @@ var CurUser string
 var SecKillFee float64
 var SecKillRate float64
 var SecKillRestDay int
+var SecKillTime int64
 
 var RuleKey string
+
 

@@ -9,6 +9,7 @@ import (
 	"kd.explorer/tools/mysql"
 	"encoding/json"
 	"kd.explorer/tools/dates"
+	"time"
 )
 
 // 告警线
@@ -54,14 +55,14 @@ func Init() {
 }
 
 func (list *TransList) Analyse() {
-	now := dates.NowTime()
+	//now := dates.NowTime()
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
 		if !CheckIsSended(item.GetKey(), item.String()) {
 			if true == SecKillRules.Check(item) {
-				if  (now - item.UpdatedAt) < SecKillTime {
-					dates.SleepSecond(SecKillTime)
-				}
+				//if  (now - item.UpdatedAt) < config.SecKillTime {
+				dates.SleepSecond(time.Duration(config.SecKillTime))
+				//}
 				if list.Cookie == "" {
 					item.SyncRunKill()
 				} else {
