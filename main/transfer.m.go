@@ -3,7 +3,7 @@ package main
 import (
 	"kd.explorer/config"
 	"kd.explorer/tools/dates"
-	"kd.explorer/service/kd"
+	"kd.explorer/service"
 	"flag"
 	"time"
 	"fmt"
@@ -18,9 +18,9 @@ func main() {
 	var t string
 	flag.StringVar(&config.CurUser, "u", "", "current user")
 	flag.StringVar(&t, "t", "", "sleep time")
-	flag.Float64Var(&config.SecKillFee, "fee", kd.SecKillMaxFEE, "")
-	flag.Float64Var(&config.SecKillRate, "rate", kd.SecKillMinRATE, "")
-	flag.IntVar(&config.SecKillRestDay, "rest", kd.SecKillMaxRestDAY, "")
+	flag.Float64Var(&config.SecKillFee, "fee", service.SecKillMaxFEE, "")
+	flag.Float64Var(&config.SecKillRate, "rate", service.SecKillMinRATE, "")
+	flag.IntVar(&config.SecKillRestDay, "rest", service.SecKillMaxRestDAY, "")
 	flag.StringVar(&config.RuleKey, "rkey", "", "")
 	flag.Int64Var(&config.SecKillTime, "st", 4, "")
 	flag.Parse()
@@ -45,7 +45,7 @@ func main() {
 
 	for now - startTime < config.RunDURATION {
 		// run analyse
-		kd.RunTA()
+		service.RunTA()
 
 		time.Sleep(time.Duration(st) * time.Second)
 		fmt.Println(fmt.Sprintf("sleep %d second", st))

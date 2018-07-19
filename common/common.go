@@ -15,16 +15,6 @@ import (
 
 const DefaultSleepTIME = time.Millisecond * 10
 
-var Config map[string]string
-
-func initConfig(path string) {
-
-}
-
-func GetConfig(key string) {
-
-}
-
 func GetLockPath() string {
 	path := "/tmp/"
 	if "windows" == runtime.GOOS {
@@ -115,12 +105,6 @@ func Wait(timePoint float64) {
 }
 
 func GetCmdStr(jobType string, extArr map[string]string) string {
-	var params string
-	if ("abcGift" == jobType) {
-		params = fmt.Sprintf(config.TaskList[jobType]["params"], extArr["ids"])
-	} else {
-		params = fmt.Sprintf(config.TaskList[jobType]["params"], jobType, extArr["ids"])
-	}
-
+	params := fmt.Sprintf(config.TaskList[jobType]["params"], jobType, extArr["ids"])
 	return 	fmt.Sprintf("cd %s;./%s %s %s", extArr["curDir"], config.TaskList[jobType]["scriptName"], params, extArr["logDir"])
 }

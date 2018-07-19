@@ -25,7 +25,7 @@ func main() {
 
 	startTime := dates.NowTime()
 	status := 0
-	workId := `"exchange","abcGift"`
+	workId := `"exchange"`
 	currentDir := common.GetPwd()
 	var logPath string
 
