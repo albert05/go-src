@@ -9,8 +9,8 @@ import (
 	"bytes"
 	"os"
 	"strings"
-	"kd.explorer/tools/https"
-	"kd.explorer/tools/dates"
+	"kd.explorer/util/https"
+	"kd.explorer/util/dates"
 )
 
 const CodeURL = "https://deposit.koudailc.com%s"

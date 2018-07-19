@@ -1,7 +1,7 @@
 package model
 
 import (
-	"kd.explorer/tools/mysql"
+	"kd.explorer/util/mysql"
 	"fmt"
 )
 

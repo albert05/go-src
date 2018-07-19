@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"kd.explorer/tools/mysql"
+	"kd.explorer/util/mysql"
 	"strings"
 )
 

@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"kd.explorer/tools/mysql"
-	"kd.explorer/tools/dates"
+	"kd.explorer/util/mysql"
+	"kd.explorer/util/dates"
 )
 
 const MonitorTable = "trans_monitor_list"
