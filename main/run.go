@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kd.explorer/tools/mysql"
+	"kd.explorer/util/mysql"
 	"kd.explorer/model"
 	"flag"
 	"kd.explorer/service"
