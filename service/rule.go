@@ -8,6 +8,7 @@ import (
 const RuleFuncPrefix  = "CheckI"
 
 type Rule struct {
+	MinFee float64 `json:"min_fee"`
 	Fee float64 `json:"fee"`
 	Rate float64 `json:"rate"`
 	Restdays int `json:"restdays"`
@@ -61,6 +62,13 @@ func (rule *Rule) Check(item TransferItem) bool {
 		i++
 	}
 
+	return true
+}
+
+func (rule *Rule) CheckIMinFee(item TransferItem) bool {
+	if item.GetFee() < rule.MinFee {
+		return false
+	}
 	return true
 }
 
