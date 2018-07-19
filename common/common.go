@@ -10,6 +10,7 @@ import (
 	"kd.explorer/config"
 	"kd.explorer/tools/dates"
 	"runtime"
+	"log"
 )
 
 const DefaultSleepTIME = time.Millisecond * 10
@@ -27,7 +28,7 @@ func GetConfig(key string) {
 func GetLockPath() string {
 	path := "/tmp/"
 	if "windows" == runtime.GOOS {
-		path = "E:\\data\\"
+		path = "C:\\data\\"
 	}
 
 	return path
@@ -46,7 +47,13 @@ func Substr(s string, pos, length int) string {
 }
 
 func Lock(name string) bool {
-	fileName := fmt.Sprintf(GetLockPath() + "%s.lock", name)
+	path := GetLockPath()
+	err := MakeDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fileName := fmt.Sprintf(path + "%s.lock", name)
 	if IsExist(fileName) {
 		return false
 	}

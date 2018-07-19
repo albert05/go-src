@@ -22,6 +22,7 @@ func main() {
 	flag.Float64Var(&config.SecKillRate, "rate", kd.SecKillMinRATE, "")
 	flag.IntVar(&config.SecKillRestDay, "rest", kd.SecKillMaxRestDAY, "")
 	flag.StringVar(&config.RuleKey, "rkey", "", "")
+	flag.Int64Var(&config.SecKillTime, "st", 4, "")
 	flag.Parse()
 
 	st := 1
