@@ -7,6 +7,7 @@ import (
 	"kd.explorer/tools/dates"
 	"runtime"
 	"time"
+	"kd.explorer/config"
 )
 
 // 检查文件或目录是否存在
@@ -156,7 +157,7 @@ func GetAllFileByPattern(dir string, pattern string) []string {
 }
 
 func GetLogPath(jobType string) string {
-	path := "/root/nginx/www/logs/kd/" + jobType + "/"
+	path := config.LogPATH + jobType + "/"
 	if err := MakeDir(path); err != nil {
 		return ""
 	}

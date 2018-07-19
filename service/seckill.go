@@ -1,4 +1,4 @@
-package kd
+package service
 
 import (
 	"kd.explorer/config"

@@ -5,7 +5,7 @@ import (
 	"kd.explorer/tools/mysql"
 	"kd.explorer/model"
 	"flag"
-	"kd.explorer/service/kd"
+	"kd.explorer/service"
 )
 
 func main() {
@@ -23,6 +23,6 @@ func main() {
 		runTaskList = append(runTaskList, task)
 	}
 
-	kd.GoRunTask(runTaskList)
+	service.GoRunTask(runTaskList)
 }
 
