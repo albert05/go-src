@@ -9,26 +9,20 @@ import (
 	"fmt"
 	"os"
 	"kd.explorer/common"
-	"strconv"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
 
 func main() {
-	var t string
+	var t float64
 	flag.StringVar(&config.CurUser, "u", "", "current user")
-	flag.StringVar(&t, "t", "", "sleep time")
+	flag.Float64Var(&t, "t", 1, "sleep time")
 	flag.Float64Var(&config.SecKillFee, "fee", service.SecKillMaxFEE, "")
 	flag.Float64Var(&config.SecKillRate, "rate", service.SecKillMinRATE, "")
 	flag.IntVar(&config.SecKillRestDay, "rest", service.SecKillMaxRestDAY, "")
 	flag.StringVar(&config.RuleKey, "rkey", "", "")
-	flag.Int64Var(&config.SecKillTime, "st", 4, "")
+	flag.Float64Var(&config.SecKillTime, "st", 3, "")
 	flag.Parse()
-
-	st := 1
-	if t != "" {
-		st, _ = strconv.Atoi(t)
-	}
 
 	code := fmt.Sprintf(LockTransferCODE + "_%s_%f_%f_%d", config.CurUser, config.SecKillFee, config.SecKillRate, config.SecKillRestDay)
 	if !common.Lock(code) {
@@ -47,8 +41,9 @@ func main() {
 		// run analyse
 		service.RunTA()
 
-		time.Sleep(time.Duration(st) * time.Second)
-		fmt.Println(fmt.Sprintf("sleep %d second", st))
+
+		time.Sleep(time.Duration(t * 1000) * time.Millisecond)
+		fmt.Println(fmt.Sprintf("sleep %f second", t))
 		now = dates.NowTime()
 	}
 }

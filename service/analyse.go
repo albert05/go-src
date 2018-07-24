@@ -8,7 +8,6 @@ import (
 	"kd.explorer/model"
 	"kd.explorer/util/mysql"
 	"encoding/json"
-	"kd.explorer/util/dates"
 	"time"
 )
 
@@ -60,9 +59,8 @@ func (list *TransList) Analyse() {
 	for _, item := range list.List.Items {
 		if !CheckIsSended(item.GetKey(), item.String()) {
 			if true == SecKillRules.Check(item) {
-				//if  (now - item.UpdatedAt) < config.SecKillTime {
-				dates.SleepSecond(time.Duration(config.SecKillTime))
-				//}
+				time.Sleep(time.Duration(config.SecKillTime * 1000) * time.Millisecond)
+				//dates.SleepSecond(time.Duration(config.SecKillTime))
 				if list.Cookie == "" {
 					item.SyncRunKill()
 				} else {
