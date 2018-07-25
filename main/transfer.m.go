@@ -5,7 +5,6 @@ import (
 	"kd.explorer/util/dates"
 	"kd.explorer/service"
 	"flag"
-	"time"
 	"fmt"
 	"os"
 	"kd.explorer/common"
@@ -41,8 +40,7 @@ func main() {
 		// run analyse
 		service.RunTA()
 
-
-		time.Sleep(time.Duration(t * 1000) * time.Millisecond)
+		dates.SleepSecond(t)
 		fmt.Println(fmt.Sprintf("sleep %f second", t))
 		now = dates.NowTime()
 	}

@@ -8,7 +8,7 @@ import (
 	"kd.explorer/model"
 	"kd.explorer/util/mysql"
 	"encoding/json"
-	"time"
+	"kd.explorer/util/dates"
 )
 
 // 告警线
@@ -20,8 +20,6 @@ const MonitorMaxRestDAY = 300    // 300天以内
 const SecKillMaxFEE = 50000  // 5万以下
 const SecKillMinRATE = 30  // 30% 以上
 const SecKillMaxRestDAY = 150    // 60天以内
-
-const SecKillTime = 3
 
 var MonitorRule *Rule
 var SecKillRules *Rules
@@ -54,13 +52,11 @@ func Init() {
 }
 
 func (list *TransList) Analyse() {
-	//now := dates.NowTime()
 	monitorMsg := make([]string, 0)
 	for _, item := range list.List.Items {
 		if !CheckIsSended(item.GetKey(), item.String()) {
 			if true == SecKillRules.Check(item) {
-				time.Sleep(time.Duration(config.SecKillTime * 1000) * time.Millisecond)
-				//dates.SleepSecond(time.Duration(config.SecKillTime))
+				dates.SleepSecond(config.SecKillTime)
 				if list.Cookie == "" {
 					item.SyncRunKill()
 				} else {
