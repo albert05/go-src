@@ -1,15 +1,15 @@
 package service
 
 import (
-	"fmt"
 	"encoding/json"
 	"errors"
-	"kd.explorer/util/https"
+	"fmt"
 	"kd.explorer/model"
+	"kd.explorer/util/https"
 )
 
 type loginResponse struct {
-	Code int ``
+	Code      int    ``
 	Sessionid string ``
 }
 

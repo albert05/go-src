@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"kd.explorer/common"
-	"os"
 	"kd.explorer/config"
-	"kd.explorer/util/dates"
 	"kd.explorer/model"
+	"kd.explorer/util/dates"
+	"os"
 	"strings"
+	"time"
 )
 
-const LockCODE  = "RUN:MONITOR:EXCHANGE"
+const LockCODE = "RUN:MONITOR:EXCHANGE"
 
 func main() {
 	if !common.Lock(LockCODE) {
@@ -30,7 +30,7 @@ func main() {
 	var logPath string
 
 	n := dates.NowTime()
-	for n - startTime < config.RunDURATION {
+	for n-startTime < config.RunDURATION {
 		list := model.FindTaskListByStatus(status, workId)
 
 		now := dates.NowDateStr()
@@ -49,11 +49,11 @@ func main() {
 		if len(taskList) > 0 {
 			for workId, list := range taskList {
 				logPath = common.GetLogPath(workId)
-				model.UpdateMultiTask(list, map[string]string {
+				model.UpdateMultiTask(list, map[string]string{
 					"status": "1",
 				})
 
-				cmdStr := common.GetCmdStr(workId, map[string]string {"ids": strings.Join(list, ","), "curDir": currentDir, "logDir": logPath})
+				cmdStr := common.GetCmdStr(workId, map[string]string{"ids": strings.Join(list, ","), "curDir": currentDir, "logDir": logPath})
 				common.Cmd(cmdStr)
 			}
 		}

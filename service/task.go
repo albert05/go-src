@@ -1,20 +1,20 @@
 package service
 
 import (
-	"fmt"
-	"time"
-	"kd.explorer/model"
 	"encoding/json"
-	"strings"
+	"fmt"
 	"kd.explorer/common"
-	"kd.explorer/util/https"
+	"kd.explorer/model"
 	"kd.explorer/util/dates"
-	"strconv"
+	"kd.explorer/util/https"
 	"kd.explorer/util/mysql"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type TaskResponse struct {
-	Code int ``
+	Code    int    ``
 	Message string ``
 }
 
@@ -52,7 +52,7 @@ func runT(task mysql.MapModel, ch chan<- string) {
 
 	fmt.Println(cookie, code.getFileName())
 
-	model.UpdateTask(taskId, map[string]string {
+	model.UpdateTask(taskId, map[string]string{
 		"img_url": code.getFileName(),
 	})
 
@@ -63,8 +63,8 @@ func runT(task mysql.MapModel, ch chan<- string) {
 	prizeNumber := task.GetAttrString("prize_number")
 
 	params := map[string]string{
-		"id": pid,
-		"imgcode": imgCode,
+		"id":           pid,
+		"imgcode":      imgCode,
 		"prize_number": prizeNumber,
 	}
 
@@ -84,7 +84,7 @@ func runT(task mysql.MapModel, ch chan<- string) {
 		status = 2
 		msg = result.Message
 	}
-	model.UpdateTask(taskId, map[string]string {
+	model.UpdateTask(taskId, map[string]string{
 		"status": strconv.Itoa(status),
 		"result": msg,
 	})

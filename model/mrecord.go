@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"kd.explorer/util/mysql"
 	"kd.explorer/util/dates"
+	"kd.explorer/util/mysql"
 )
 
 const MonitorTable = "trans_monitor_list"
@@ -19,9 +19,9 @@ func FindMRecord(transId string) mysql.MapModel {
 }
 
 func InsertMRecord(transId, data string) bool {
-	datas := map[string]string {
-		"trans_id": transId,
-		"data": data,
+	datas := map[string]string{
+		"trans_id":   transId,
+		"data":       data,
 		"created_at": fmt.Sprintf("%d", dates.NowTime()),
 	}
 

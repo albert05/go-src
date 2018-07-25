@@ -2,28 +2,28 @@
 package sms
 
 import (
-	"fmt"
-	"kd.explorer/config"
-	"strconv"
 	"encoding/xml"
 	"errors"
+	"fmt"
+	"kd.explorer/config"
 	"kd.explorer/util/https"
+	"strconv"
 )
 
 const SendURL = "https://115.29.242.32:8888/sms.aspx?action=send"
-const SmsSuccessSTATUS  = "Success"
+const SmsSuccessSTATUS = "Success"
 const DefaultSIGN = "【鼎丰所】"
 
 type Sms struct {
-	Status string `returnstatus`
+	Status  string `returnstatus`
 	Message string `message`
 }
 
 type SmsResponse struct {
-	XMLName     xml.Name `xml:"returnsms"`
-	Version     string   `xml:"version"`
-	Status string `xml:"returnstatus"`
-	Message string `xml:"message"`
+	XMLName xml.Name `xml:"returnsms"`
+	Version string   `xml:"version"`
+	Status  string   `xml:"returnstatus"`
+	Message string   `xml:"message"`
 }
 
 func Send(phone int, content string) error {

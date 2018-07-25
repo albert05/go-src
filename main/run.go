@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"kd.explorer/util/mysql"
-	"kd.explorer/model"
 	"flag"
+	"fmt"
+	"kd.explorer/model"
 	"kd.explorer/service"
+	"kd.explorer/util/mysql"
 )
 
 func main() {
@@ -25,4 +25,3 @@ func main() {
 
 	service.GoRunTask(runTaskList)
 }
-

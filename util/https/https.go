@@ -1,11 +1,11 @@
 package https
 
 import (
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"io/ioutil"
 	"strings"
-	"io"
 	"time"
 )
 
@@ -34,7 +34,7 @@ func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 
 	// set cookie
 	if cookie != "" {
-		request.Header.Add("cookie", "SESSIONID=" + cookie)
+		request.Header.Add("cookie", "SESSIONID="+cookie)
 	}
 
 	//给一个key设定为响应的value
@@ -55,7 +55,6 @@ func Post(uri string, params map[string]string, cookie string) ([]byte, error) {
 	//fmt.Println(string(content))
 	return content, nil
 }
-
 
 func PostWithoutCookie(url, params string) ([]byte, error) {
 	resp, err := http.Post(url, DefaultContentTYPE, strings.NewReader(params))

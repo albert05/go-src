@@ -2,12 +2,12 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"kd.explorer/config"
+	"log"
 	"strings"
 	"unsafe"
-	"fmt"
 )
 
 type Mysql struct {
@@ -128,10 +128,10 @@ func (this *Mysql) FindAll(sql string) ([]MapModel, error) {
 	return tableData, nil
 }
 
- // 插入数据
- // string table
- // map data 插入的数据
- // return bool
+// 插入数据
+// string table
+// map data 插入的数据
+// return bool
 func (this *Mysql) Insert(table string, data map[string]string) bool {
 	if data == nil {
 		return false
@@ -167,7 +167,6 @@ func (this *Mysql) Insert(table string, data map[string]string) bool {
 	var qResult queryResult = *(*queryResult)(unsafe.Pointer(&result))
 	return qResult.affectedRows > 0
 }
-
 
 // 更新数据
 // string table

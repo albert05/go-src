@@ -1,9 +1,9 @@
 package config
 
 //
-var TaskList = map[string]map[string]string {
+var TaskList = map[string]map[string]string{
 	"exchange": {
 		"scriptName": "run",
-		"params": " -t %s -l %s",
+		"params":     " -t %s -l %s",
 	},
 }

@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-const RuleFuncPrefix  = "CheckI"
+const RuleFuncPrefix = "CheckI"
 
 type Rule struct {
-	MinFee float64 `json:"min_fee"`
-	Fee float64 `json:"fee"`
-	Rate float64 `json:"rate"`
-	Restdays int `json:"restdays"`
+	MinFee   float64 `json:"min_fee"`
+	Fee      float64 `json:"fee"`
+	Rate     float64 `json:"rate"`
+	Restdays int     `json:"restdays"`
 }
 
 type Rules struct {

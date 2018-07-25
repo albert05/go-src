@@ -3,8 +3,8 @@ package mail
 import (
 	"gopkg.in/gomail.v2"
 	"kd.explorer/config"
-	"strconv"
 	"log"
+	"strconv"
 )
 
 func Send(receivers []string, subject, content string) bool {

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"kd.explorer/config"
-	"kd.explorer/util/dates"
-	"kd.explorer/service"
 	"flag"
 	"fmt"
-	"os"
 	"kd.explorer/common"
+	"kd.explorer/config"
+	"kd.explorer/service"
+	"kd.explorer/util/dates"
+	"os"
 )
 
 const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
@@ -23,7 +23,7 @@ func main() {
 	flag.Float64Var(&config.SecKillTime, "st", 3, "")
 	flag.Parse()
 
-	code := fmt.Sprintf(LockTransferCODE + "_%s_%f_%f_%d", config.CurUser, config.SecKillFee, config.SecKillRate, config.SecKillRestDay)
+	code := fmt.Sprintf(LockTransferCODE+"_%s_%f_%f_%d", config.CurUser, config.SecKillFee, config.SecKillRate, config.SecKillRestDay)
 	if !common.Lock(code) {
 		fmt.Println(code + " is running...")
 		os.Exit(0)
@@ -36,7 +36,7 @@ func main() {
 	startTime := dates.NowTime()
 	now := startTime
 
-	for now - startTime < config.RunDURATION {
+	for now-startTime < config.RunDURATION {
 		// run analyse
 		service.RunTA()
 

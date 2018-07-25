@@ -2,10 +2,10 @@ package service
 
 import (
 	"encoding/json"
-	"strconv"
-	"kd.explorer/util/https"
-	"kd.explorer/config"
 	"fmt"
+	"kd.explorer/config"
+	"kd.explorer/util/https"
+	"strconv"
 )
 
 const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=2&sortRuleType=2"
@@ -16,12 +16,12 @@ const RetryCNT = 3
 var Cookie string
 
 type TransferItem struct {
-	Id string `json:"id"`
-	InvestId string `json:"invest_id"`
-	AssignFee string `json:"assign_fee"`
+	Id         string `json:"id"`
+	InvestId   string `json:"invest_id"`
+	AssignFee  string `json:"assign_fee"`
 	AssignRate string `json:"assign_rate"`
-	RestDays int `json:"rest_days"`
-	UpdatedAt int64 `json:"updated_at"`
+	RestDays   int    `json:"rest_days"`
+	UpdatedAt  int64  `json:"updated_at"`
 }
 
 func (item *TransferItem) GetFee() float64 {
@@ -30,7 +30,7 @@ func (item *TransferItem) GetFee() float64 {
 		return 0
 	}
 
-	return fee /100
+	return fee / 100
 }
 
 func (item *TransferItem) GetRate() float64 {
@@ -53,15 +53,15 @@ func (item *TransferItem) String() string {
 }
 
 type TransTmp struct {
-	Code int ``
+	Code  int            ``
 	Items []TransferItem `json:"creditItems"`
 }
 
 type TransList struct {
-	Code int
-	List TransTmp `json:"recentlyPublishedItems"`
-	IsLogin int `json:"is_login"`
-	Cookie string
+	Code    int
+	List    TransTmp `json:"recentlyPublishedItems"`
+	IsLogin int      `json:"is_login"`
+	Cookie  string
 }
 
 func InitCookie(isFlush bool) {

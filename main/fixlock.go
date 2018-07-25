@@ -1,10 +1,10 @@
 package main
 
 import (
-	"kd.explorer/common"
-	"kd.explorer/util/dates"
 	"fmt"
+	"kd.explorer/common"
 	"kd.explorer/config"
+	"kd.explorer/util/dates"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		now := dates.NowTime()
 		for _, file := range files {
 			mt := common.GetFileModTime(file)
-			if now - mt > fixTime {
+			if now-mt > fixTime {
 				fmt.Println(common.RemoveFile(file))
 			}
 		}

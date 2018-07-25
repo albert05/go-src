@@ -1,16 +1,19 @@
 package common
 
 import (
-	"fmt"
-	"os"
-	"math/rand"
-	"os/exec"
 	"bytes"
-	"time"
+	"errors"
+	"fmt"
 	"kd.explorer/config"
 	"kd.explorer/util/dates"
-	"runtime"
 	"log"
+	"math/rand"
+	"os"
+	"os/exec"
+	"regexp"
+	"runtime"
+	"strings"
+	"time"
 )
 
 const DefaultSleepTIME = time.Millisecond * 10
@@ -43,13 +46,13 @@ func Lock(name string) bool {
 		log.Fatal(err)
 	}
 
-	fileName := fmt.Sprintf(path + "%s.lock", name)
+	fileName := fmt.Sprintf(path+"%s.lock", name)
 	if IsExist(fileName) {
 		return false
 	}
 
 	f, err := os.Create(fileName)
-	if  err != nil {
+	if err != nil {
 		return false
 	}
 
@@ -58,7 +61,7 @@ func Lock(name string) bool {
 }
 
 func UnLock(name string) bool {
-	fileName := fmt.Sprintf(GetLockPath() + "%s.lock", name)
+	fileName := fmt.Sprintf(GetLockPath()+"%s.lock", name)
 	if !IsExist(fileName) {
 		return false
 	}
@@ -71,10 +74,9 @@ func UnLock(name string) bool {
 }
 
 func GenerateRangeNum(min, max int) int {
-	randNum := rand.Intn(max - min) + min
+	randNum := rand.Intn(max-min) + min
 	return randNum
 }
-
 
 // 异步执行命令
 func Cmd(cmdStr string) {
@@ -106,5 +108,26 @@ func Wait(timePoint float64) {
 
 func GetCmdStr(jobType string, extArr map[string]string) string {
 	params := fmt.Sprintf(config.TaskList[jobType]["params"], jobType, extArr["ids"])
-	return 	fmt.Sprintf("cd %s;./%s %s %s", extArr["curDir"], config.TaskList[jobType]["scriptName"], params, extArr["logDir"])
+	return fmt.Sprintf("cd %s;./%s %s %s", extArr["curDir"], config.TaskList[jobType]["scriptName"], params, extArr["logDir"])
+}
+
+/**
+ *	获取本机IP
+ *	@return string
+ */
+func GetLocalIp() (string, error) {
+	ipData, err := Exec("curl ip.cn")
+	if err != nil {
+		return "", errors.New("GetLocalIp: " + err.Error())
+	}
+
+	reg := regexp.MustCompile(`当前 IP：([0-9.]*).*`)
+	localIps := reg.FindStringSubmatch(string(ipData))
+	fmt.Println(localIps)
+
+	if len(localIps) < 2 {
+		return "", errors.New("GetLocalIp: " + strings.Replace(strings.Join(localIps, "|"), "\n", "", -1))
+	}
+
+	return localIps[1], nil
 }

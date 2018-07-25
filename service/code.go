@@ -1,16 +1,16 @@
 package service
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"kd.explorer/common"
-	"strconv"
 	"io"
-	"bytes"
-	"os"
-	"strings"
-	"kd.explorer/util/https"
+	"kd.explorer/common"
 	"kd.explorer/util/dates"
+	"kd.explorer/util/https"
+	"os"
+	"strconv"
+	"strings"
 )
 
 const CodeURL = "https://deposit.koudailc.com%s"
@@ -20,13 +20,13 @@ var ImagePATH string
 var ImagePrefixPATH string
 
 type CodeResponse struct {
-	Hash1 int ``
-	Url string ``
+	Hash1 int    ``
+	Url   string ``
 }
 
 type Code struct {
-	Cookie string ``
-	Url string ``
+	Cookie   string ``
+	Url      string ``
 	FileName string ``
 }
 

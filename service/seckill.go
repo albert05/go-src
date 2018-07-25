@@ -1,19 +1,19 @@
 package service
 
 import (
-	"kd.explorer/config"
-	"fmt"
-	"kd.explorer/util/https"
 	"encoding/json"
-	"kd.explorer/util/mail"
+	"fmt"
+	"kd.explorer/config"
 	"kd.explorer/model"
+	"kd.explorer/util/https"
+	"kd.explorer/util/mail"
 )
 
 const TransOrderURL = "https://deposit.koudailc.com/credit/apply-assignment"
 
 type OrderResp struct {
 	Code int `json:"code"`
-	Uid int `json:"uid"`
+	Uid  int `json:"uid"`
 }
 
 // 单账号秒杀
@@ -91,9 +91,9 @@ func (item *TransferItem) MakeOrderParams(user string) map[string]string {
 	paypasswd := userInfo.GetAttrString("pay_passwd")
 
 	return map[string]string{
-		"invest_id": item.InvestId,
+		"invest_id":    item.InvestId,
 		"pay_password": paypasswd,
-		"use_remain": "1",
-		"is_kdb_pay": "0",
+		"use_remain":   "1",
+		"is_kdb_pay":   "0",
 	}
 }

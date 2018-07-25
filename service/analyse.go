@@ -1,25 +1,25 @@
 package service
 
 import (
-	"fmt"
-	"strings"
-	"kd.explorer/config"
-	"kd.explorer/util/mail"
-	"kd.explorer/model"
-	"kd.explorer/util/mysql"
 	"encoding/json"
+	"fmt"
+	"kd.explorer/config"
+	"kd.explorer/model"
 	"kd.explorer/util/dates"
+	"kd.explorer/util/mail"
+	"kd.explorer/util/mysql"
+	"strings"
 )
 
 // 告警线
 const MonitorMaxFEE = 100000  // 10万以下
-const MonitorMinRATE = 15  // 15% 以上
-const MonitorMaxRestDAY = 300    // 300天以内
+const MonitorMinRATE = 15     // 15% 以上
+const MonitorMaxRestDAY = 300 // 300天以内
 
 // 秒杀线
-const SecKillMaxFEE = 50000  // 5万以下
-const SecKillMinRATE = 30  // 30% 以上
-const SecKillMaxRestDAY = 150    // 60天以内
+const SecKillMaxFEE = 50000   // 5万以下
+const SecKillMinRATE = 30     // 30% 以上
+const SecKillMaxRestDAY = 150 // 60天以内
 
 var MonitorRule *Rule
 var SecKillRules *Rules
@@ -104,4 +104,3 @@ func RunTA() {
 		list.Analyse()
 	}
 }
-

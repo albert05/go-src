@@ -8,7 +8,7 @@ const DefaultSTRVAL = ""
 const DefaultFLTVAL = 0
 
 func (this MapModel) GetAttrString(k string) string {
-	if val, ok := this[k];ok {
+	if val, ok := this[k]; ok {
 		if vStr, ok := val.(string); ok {
 			return vStr
 		}

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"kd.explorer/config"
 	"kd.explorer/service"
-	"flag"
-	"time"
-	"fmt"
 	"strconv"
+	"time"
 )
 
 func main() {

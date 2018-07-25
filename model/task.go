@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const TaskTable  = "tasks"
+const TaskTable = "tasks"
 
 func FindTask(id int) mysql.MapModel {
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE id =%d", TaskTable, id)
@@ -42,7 +42,7 @@ func FindTaskListByIds(ids string) []mysql.MapModel {
 }
 
 func UpdateTask(id int, data map[string]string) bool {
-	condition := map[string]string {
+	condition := map[string]string{
 		"where": fmt.Sprintf("id=%d", id),
 	}
 
@@ -50,7 +50,7 @@ func UpdateTask(id int, data map[string]string) bool {
 }
 
 func UpdateMultiTask(ids []string, data map[string]string) bool {
-	condition := map[string]string {
+	condition := map[string]string{
 		"where": fmt.Sprintf("id in(%s)", strings.Join(ids, ",")),
 	}
 

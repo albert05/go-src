@@ -1,8 +1,8 @@
 package dates
 
 import (
-	"time"
 	"strconv"
+	"time"
 )
 
 const DefaultDateFormatSTR = "2006-01-02 15:04:05"
@@ -25,7 +25,7 @@ func CurrentMicro() int64 {
 
 func TimeInt2float(t int64) float64 {
 	r := t / 1e6
-	micro := t - r * 1e6
+	micro := t - r*1e6
 
 	tm := time.Unix(r, 0)
 	f, err := strconv.ParseFloat(tm.Format("150405"), 64)
@@ -33,9 +33,9 @@ func TimeInt2float(t int64) float64 {
 		return 0
 	}
 
-	return f + float64(micro) / 1e6
+	return f + float64(micro)/1e6
 }
 
 func SleepSecond(t float64) {
-	time.Sleep(time.Duration(t * 1000) * time.Millisecond)
+	time.Sleep(time.Duration(t*1000) * time.Millisecond)
 }
