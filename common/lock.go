@@ -46,5 +46,5 @@ func UnLock() bool {
 }
 
 func getLockName() string {
-	return GetLockPath() + fmt.Sprintf(path.Base(os.Args[0])+"_%s.lock", config.CurUser)
+	return GetLockPath() + fmt.Sprintf(config.ProNAME + path.Base(os.Args[0])+"_%s.lock", config.CurUser)
 }
