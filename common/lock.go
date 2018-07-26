@@ -16,7 +16,7 @@ func Lock() bool {
 
 	fileName := getLockName()
 	if IsExist(fileName) {
-		fmt.Println(path+" is running")
+		fmt.Println(fileName+" is running")
 		return false
 	}
 
