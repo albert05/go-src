@@ -1,22 +1,16 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"kd.explorer/model"
 	"kd.explorer/service"
 	"kd.explorer/util/mysql"
+	"kd.explorer/config"
 )
 
 func main() {
-	var jobType string
-	var jobList string
-	flag.StringVar(&jobType, "t", "exchange", "jobType")
-	flag.StringVar(&jobList, "l", "", "jobList")
-	flag.Parse()
+	service.ConfigInit()
 
-	fmt.Println(jobList)
-	list := model.FindTaskListByIds(jobList)
+	list := model.FindTaskListByIds(config.JobList)
 
 	runTaskList := make([]mysql.MapModel, 0)
 	for _, task := range list {

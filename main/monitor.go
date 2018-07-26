@@ -9,19 +9,17 @@ import (
 	"os"
 	"strings"
 	"time"
+	"kd.explorer/service"
+	"kd.explorer/exception"
 )
 
-const LockCODE = "RUN:MONITOR:EXCHANGE"
-
 func main() {
-	if !common.Lock(LockCODE) {
-		fmt.Println(LockCODE + " is running...")
+	service.ConfigInit()
+
+	if !common.Lock() {
 		os.Exit(0)
 	}
-	defer func() {
-		common.UnLock(LockCODE)
-		os.Exit(0)
-	}()
+	defer exception.Handle(true)
 
 	startTime := dates.NowTime()
 	status := 0

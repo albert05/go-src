@@ -16,11 +16,6 @@ const MonitorMaxFEE = 100000  // 10万以下
 const MonitorMinRATE = 15     // 15% 以上
 const MonitorMaxRestDAY = 300 // 300天以内
 
-// 秒杀线
-const SecKillMaxFEE = 50000   // 5万以下
-const SecKillMinRATE = 30     // 30% 以上
-const SecKillMaxRestDAY = 150 // 60天以内
-
 var MonitorRule *Rule
 var SecKillRules *Rules
 
@@ -48,7 +43,6 @@ func Init() {
 		json.Unmarshal([]byte(rule.GetAttrString("rule")), &r)
 		SecKillRules.R = r
 	}
-
 }
 
 func (list *TransList) Analyse() {

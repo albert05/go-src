@@ -74,9 +74,7 @@ func (item *TransferItem) runT(user string, ch chan<- bool) {
 	if result.Code == 0 && result.Uid != 0 {
 		msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId)
 		fmt.Println(msg)
-		for _, receiver := range config.MailReceiverList {
-			mail.SendSingle(receiver, "高息转让项目抢购成功提醒", msg)
-		}
+		mail.SendSingle(config.AdminMailer, "高息转让项目抢购成功提醒", msg)
 		ch <- true
 		return
 	}
