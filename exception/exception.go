@@ -28,7 +28,7 @@ func Handle(isExit bool) {
 			sErr = errMsg
 		}
 
-		mail.SendSingle(config.AdminMailer, "SYSTEM NOTICE", sErr)
+		mail.SendSingle(config.AdminMailer, config.ProNAME + "SYSTEM NOTICE", sErr)
 
 		if isExit {
 			common.UnLock()
