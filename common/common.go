@@ -6,9 +6,7 @@ import (
 	"fmt"
 	"kd.explorer/config"
 	"kd.explorer/util/dates"
-	"log"
 	"math/rand"
-	"os"
 	"os/exec"
 	"regexp"
 	"runtime"
@@ -20,11 +18,15 @@ const DefaultSleepTIME = time.Millisecond * 10
 
 func GetLockPath() string {
 	path := "/tmp/"
-	if "windows" == runtime.GOOS {
+	if IsWindows() {
 		path = "C:\\data\\"
 	}
 
 	return path
+}
+
+func IsWindows() bool {
+	return "windows" == runtime.GOOS
 }
 
 func Substr(s string, pos, length int) string {
@@ -37,40 +39,6 @@ func Substr(s string, pos, length int) string {
 		l = len(runes)
 	}
 	return string(runes[pos:l])
-}
-
-func Lock(name string) bool {
-	path := GetLockPath()
-	err := MakeDir(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fileName := fmt.Sprintf(path+"%s.lock", name)
-	if IsExist(fileName) {
-		return false
-	}
-
-	f, err := os.Create(fileName)
-	if err != nil {
-		return false
-	}
-
-	defer f.Close()
-	return true
-}
-
-func UnLock(name string) bool {
-	fileName := fmt.Sprintf(GetLockPath()+"%s.lock", name)
-	if !IsExist(fileName) {
-		return false
-	}
-
-	if err := os.RemoveAll(fileName); err != nil {
-		return false
-	}
-
-	return true
 }
 
 func GenerateRangeNum(min, max int) int {
@@ -116,6 +84,10 @@ func GetCmdStr(jobType string, extArr map[string]string) string {
  *	@return string
  */
 func GetLocalIp() (string, error) {
+	if IsWindows() {
+		return "127.0.0.1", nil
+	}
+
 	ipData, err := Exec("curl ip.cn")
 	if err != nil {
 		return "", errors.New("GetLocalIp: " + err.Error())
@@ -123,7 +95,6 @@ func GetLocalIp() (string, error) {
 
 	reg := regexp.MustCompile(`当前 IP：([0-9.]*).*`)
 	localIps := reg.FindStringSubmatch(string(ipData))
-	fmt.Println(localIps)
 
 	if len(localIps) < 2 {
 		return "", errors.New("GetLocalIp: " + strings.Replace(strings.Join(localIps, "|"), "\n", "", -1))

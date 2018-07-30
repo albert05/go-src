@@ -1,37 +1,23 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"kd.explorer/common"
 	"kd.explorer/config"
 	"kd.explorer/service"
 	"kd.explorer/util/dates"
 	"os"
+	"kd.explorer/exception"
 )
 
-const LockTransferCODE = "RUN.MONITOR.TRANSFERS"
-
 func main() {
-	var t float64
-	flag.StringVar(&config.CurUser, "u", "", "current user")
-	flag.Float64Var(&t, "t", 1, "sleep time")
-	flag.Float64Var(&config.SecKillFee, "fee", service.SecKillMaxFEE, "")
-	flag.Float64Var(&config.SecKillRate, "rate", service.SecKillMinRATE, "")
-	flag.IntVar(&config.SecKillRestDay, "rest", service.SecKillMaxRestDAY, "")
-	flag.StringVar(&config.RuleKey, "rkey", "", "")
-	flag.Float64Var(&config.SecKillTime, "st", 3, "")
-	flag.Parse()
+	service.ConfigInit()
 
-	code := fmt.Sprintf(LockTransferCODE+"_%s_%f_%f_%d", config.CurUser, config.SecKillFee, config.SecKillRate, config.SecKillRestDay)
-	if !common.Lock(code) {
-		fmt.Println(code + " is running...")
+	if !common.Lock() {
 		os.Exit(0)
 	}
-	defer func() {
-		common.UnLock(code)
-		os.Exit(0)
-	}()
+	defer common.UnLock()
+	defer exception.Handle(true)
 
 	startTime := dates.NowTime()
 	now := startTime
@@ -40,8 +26,8 @@ func main() {
 		// run analyse
 		service.RunTA()
 
-		dates.SleepSecond(t)
-		fmt.Println(fmt.Sprintf("sleep %f second", t))
+		dates.SleepSecond(config.SleepT)
+		fmt.Println(fmt.Sprintf("sleep %f second", config.SleepT))
 		now = dates.NowTime()
 	}
 }

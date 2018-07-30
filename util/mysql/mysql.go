@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"kd.explorer/config"
-	"log"
 	"strings"
 	"unsafe"
 )
@@ -37,7 +36,7 @@ func GetInstance() Mysql {
 
 	db, err := sql.Open(DriverNAME, DSN)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 		return Mysql{}
 	}
 

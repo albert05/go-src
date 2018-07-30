@@ -1,10 +1,14 @@
 package main
 
 import (
+	"os"
 	"fmt"
-	"kd.explorer/common"
 )
 
 func main() {
-	fmt.Println(common.GetLocalIp())
+	f, err := os.Create("E:\\data222\\test.log")
+	if err != nil {
+		fmt.Println(err)
+	}
+	f.Close()
 }

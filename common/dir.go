@@ -5,7 +5,6 @@ import (
 	"kd.explorer/util/dates"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 )
@@ -135,7 +134,7 @@ func GetAllFileByDirSuffix(dir string, suffix string) []string {
 
 func GetSysDirSuffix() string {
 	suffix := "/"
-	if "windows" == runtime.GOOS {
+	if IsWindows() {
 		suffix = "\\"
 	}
 
