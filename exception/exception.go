@@ -34,5 +34,7 @@ func Handle(isExit bool) {
 			common.UnLock()
 			os.Exit(1)
 		}
+	} else {
+		common.UnLock()
 	}
 }

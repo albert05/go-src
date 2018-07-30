@@ -19,7 +19,6 @@ func main() {
 	if !common.Lock() {
 		os.Exit(0)
 	}
-	defer common.UnLock()
 	defer exception.Handle(true)
 
 	startTime := dates.NowTime()
