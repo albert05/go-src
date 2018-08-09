@@ -51,10 +51,10 @@ func (list *TransList) Analyse() {
 		if !CheckIsSended(item.GetKey(), item.String()) {
 			if true == SecKillRules.Check(item) {
 				dates.SleepSecond(config.SecKillTime)
-				if list.Cookie == "" {
-					item.SyncRunKill()
-				} else {
-					item.RunKill(list.Cookie)
+				if config.SecUser != "" {
+					if cookie, err := LoginK(config.SecUser); err == nil {
+						item.RunKill(cookie)
+					}
 				}
 			}
 			if true == MonitorRule.Check(item) {

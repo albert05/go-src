@@ -12,6 +12,7 @@ var SecKillFee float64
 var SecKillRate float64
 var SecKillRestDay int
 var SecKillTime float64
+var SecUser string
 var SleepT float64
 var RuleKey string
 

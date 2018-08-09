@@ -9,6 +9,7 @@ import (
 func ConfigInit() {
 	// transfer.m.go
 	flag.StringVar(&config.CurUser, "u", "", "")
+	flag.StringVar(&config.SecUser, "su", "", "")
 	flag.Float64Var(&config.SleepT, "t", 1, "sleep time")
 	flag.Float64Var(&config.SecKillFee, "fee", 50000, "")
 	flag.Float64Var(&config.SecKillRate, "rate", 30, "")
