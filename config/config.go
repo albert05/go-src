@@ -1,7 +1,7 @@
 package config
 
 const ProNAME = "kd.pro"
-const LogPATH = "/root/nginx/www/logs/" + ProNAME + "/"
+const LogPATH = "/www/logs/" + ProNAME + "/"
 const RunDURATION = 290
 const AdminMailer = "fengelom@163.com"
 
