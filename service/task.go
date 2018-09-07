@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"kd.explorer/util/logger"
 )
 
 type TaskResponse struct {
@@ -35,7 +36,7 @@ func GoRunTask(taskList []mysql.MapModel) {
 
 func runT(task mysql.MapModel, ch chan<- string) {
 	taskId := task.GetAttrInt("id")
-	fmt.Println(fmt.Sprintf("taskID %d start work", taskId))
+	logger.Info(fmt.Sprintf("taskID %d start work", taskId))
 	userKey := task.GetAttrString("user_key")
 
 	cookie, err := LoginK(userKey)
@@ -50,7 +51,7 @@ func runT(task mysql.MapModel, ch chan<- string) {
 	code.RandFileName()
 	code.CreateImage()
 
-	fmt.Println(cookie, code.getFileName())
+	logger.Info(cookie, code.getFileName())
 
 	model.UpdateTask(taskId, map[string]string{
 		"img_url": code.getFileName(),
@@ -70,7 +71,7 @@ func runT(task mysql.MapModel, ch chan<- string) {
 
 	body, err := https.Post(ExchangeURL, params, cookie)
 	if err != nil {
-		fmt.Println(err)
+		logger.Info(err)
 		ch <- err.Error()
 		return
 	}
@@ -89,13 +90,13 @@ func runT(task mysql.MapModel, ch chan<- string) {
 		"result": msg,
 	})
 
-	fmt.Println(userKey + " -- " + string(body))
+	logger.Info(userKey + " -- " + string(body))
 	ch <- "success"
 }
 
 func wait(timePoint float64, taskId int) string {
 	currTime := dates.TimeInt2float(dates.CurrentMicro())
-	fmt.Println(currTime, timePoint)
+	logger.Info(currTime, timePoint)
 
 	var imgCode string
 

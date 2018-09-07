@@ -4,6 +4,7 @@ import (
 	"flag"
 	"kd.explorer/config"
 	"kd.explorer/common"
+	"kd.explorer/util/logger"
 )
 
 func ConfigInit() {
@@ -17,7 +18,7 @@ func ConfigInit() {
 	flag.StringVar(&config.RuleKey, "rkey", "", "")
 	flag.Float64Var(&config.SecKillTime, "st", 3, "")
 
-	// run.go
+	// exchange.go
 	flag.StringVar(&config.JobType, "tp", "exchange", "jobType")
 	flag.StringVar(&config.JobList, "l", "", "jobList")
 	flag.Parse()
@@ -28,4 +29,9 @@ func ConfigInit() {
 		panic("GetLocalIp Err:" + err.Error())
 	}
 	config.LocalIp = localIp
+
+	// log init
+	logger.SetConsole(false)
+	logger.SetLevel(logger.INFO)
+	logger.SetRollingDaily(common.GetLogPath())
 }

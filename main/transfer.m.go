@@ -8,6 +8,7 @@ import (
 	"kd.explorer/util/dates"
 	"os"
 	"kd.explorer/exception"
+	"kd.explorer/util/logger"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 		service.RunTA()
 
 		dates.SleepSecond(config.SleepT)
-		fmt.Println(fmt.Sprintf("sleep %f second", config.SleepT))
+		logger.Info(fmt.Sprintf("sleep %f second", config.SleepT))
 		now = dates.NowTime()
 	}
 }
