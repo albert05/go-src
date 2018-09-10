@@ -5,6 +5,7 @@ import (
 	"kd.explorer/service"
 	"kd.explorer/util/mysql"
 	"kd.explorer/config"
+	"kd.explorer/service/tasks"
 )
 
 func main() {
@@ -17,5 +18,5 @@ func main() {
 		runTaskList = append(runTaskList, task)
 	}
 
-	service.GoRunTask(runTaskList)
+	tasks.GoRunTask(runTaskList)
 }

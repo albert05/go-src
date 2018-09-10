@@ -1,7 +1,7 @@
 package config
 
 const ProNAME = "kd.pro"
-const LogPATH = "/root/nginx/www/logs/" + ProNAME + "/"
+const LogPATH = "/www/logs/" + ProNAME + "/"
 const RunDURATION = 290
 const AdminMailer = "fengelom@163.com"
 
@@ -12,6 +12,7 @@ var SecKillFee float64
 var SecKillRate float64
 var SecKillRestDay int
 var SecKillTime float64
+var SecUser string
 var SleepT float64
 var RuleKey string
 

@@ -1,4 +1,4 @@
-package service
+package base
 
 import (
 	"bytes"
@@ -32,15 +32,15 @@ type Code struct {
 
 func init() {
 	// 目录暂设置在laravel
-	ImagePrefixPATH = "/root/nginx/www/laravel/public/"
+	ImagePrefixPATH = "/www/laravel/public/"
 	ImagePATH = ImagePrefixPATH + "goimg/"
 }
 
-func (code *Code) setCookie(cookie string) {
+func (code *Code) SetCookie(cookie string) {
 	code.Cookie = cookie
 }
 
-func (code *Code) getFileName() string {
+func (code *Code) GetFileName() string {
 	return strings.TrimPrefix(code.FileName, ImagePrefixPATH)
 }
 

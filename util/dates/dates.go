@@ -39,3 +39,19 @@ func TimeInt2float(t int64) float64 {
 func SleepSecond(t float64) {
 	time.Sleep(time.Duration(t*1000) * time.Millisecond)
 }
+
+func NowYearMonthStr() string {
+	return time.Now().Format("200601")
+}
+
+func NowDayStr() string {
+	return time.Now().Format("20060102")
+}
+
+func TimeAfterNDays(n int) string {
+	return time.Now().AddDate(0,0,n).Format(DefaultDateFormatSTR)
+}
+
+func DateAfterNDays(n int) string {
+	return time.Now().AddDate(0,0,n).Format("2006-01-02") + " 00:00:00"
+}

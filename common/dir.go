@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	"path"
 )
 
 // 检查文件或目录是否存在
@@ -155,13 +156,10 @@ func GetAllFileByPattern(dir string, pattern string) []string {
 	return files
 }
 
-func GetLogPath(jobType string) string {
-	path := config.LogPATH + jobType + "/"
-	if err := MakeDir(path); err != nil {
-		return ""
-	}
-
-	return " 1> " + path + dates.NowDateShortStr() + ".log 2>&1"
+func GetLogPath() (string, string) {
+	logDir := config.LogPATH + GetOnlyFileName(os.Args[0]) + "/" + dates.NowYearMonthStr()
+	logFile := dates.NowDayStr() + ".log"
+	return logDir, logFile
 }
 
 func GetFileModTime(file string) int64 {
@@ -177,4 +175,10 @@ func GetFileModTime(file string) int64 {
 	}
 
 	return fi.ModTime().Unix()
+}
+
+func GetOnlyFileName(filename string) string {
+	a := path.Base(filename)
+	e := path.Ext(a)
+	return strings.TrimSuffix(a, e)
 }
