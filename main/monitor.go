@@ -11,6 +11,7 @@ import (
 	"kd.explorer/service"
 	"kd.explorer/exception"
 	"kd.explorer/util/logger"
+	"kd.explorer/service/tasks"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 
 	startTime := dates.NowTime()
 	status := 0
-	workId := `"exchange"`
+	workId := `"exchange","daily"`
 	currentDir := common.GetPwd()
 
 	n := dates.NowTime()
@@ -45,9 +46,7 @@ func main() {
 
 		if len(taskList) > 0 {
 			for workId, list := range taskList {
-				model.UpdateMultiTask(list, map[string]string{
-					"status": "1",
-				})
+				model.UpdateMultiTask(list, tasks.GetUpdateData(workId))
 
 				cmdStr := common.GetCmdStr(workId, map[string]string{"ids": strings.Join(list, ","), "curDir": currentDir})
 				common.Cmd(cmdStr)

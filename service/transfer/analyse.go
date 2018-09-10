@@ -1,14 +1,11 @@
-package service
+package transfer
 
 import (
 	"encoding/json"
-	"fmt"
 	"kd.explorer/config"
 	"kd.explorer/model"
-	"kd.explorer/util/dates"
-	"kd.explorer/util/mail"
 	"kd.explorer/util/mysql"
-	"strings"
+	"kd.explorer/util/logger"
 )
 
 // 告警线
@@ -45,39 +42,6 @@ func Init() {
 	}
 }
 
-func (list *TransList) Analyse() {
-	monitorMsg := make([]string, 0)
-	for _, item := range list.List.Items {
-		if !CheckIsSended(item.GetKey(), item.String()) {
-			if true == SecKillRules.Check(item) {
-				dates.SleepSecond(config.SecKillTime)
-				if config.SecUser != "" {
-					if cookie, err := LoginK(config.SecUser); err == nil {
-						item.RunKill(cookie)
-					}
-				}
-			}
-			if true == MonitorRule.Check(item) {
-				monitorMsg = append(monitorMsg, item.GetMonitorMsg())
-			}
-		}
-	}
-
-	fmt.Println(monitorMsg)
-
-	// is send monitor msg
-	if len(monitorMsg) > 0 {
-		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
-		fmt.Println(msg)
-		// send mail
-		email := model.FindUser(config.CurUser).GetAttrString("email")
-		mail.SendSingle(email, "高息转让项目提醒", msg)
-	}
-}
-
-func (item *TransferItem) GetMonitorMsg() string {
-	return fmt.Sprintf("转让年化：%.2f%s, 金额：%.2f, 剩余天数：%d", item.GetRate(), "%", item.GetFee(), item.RestDays)
-}
 
 func CheckIsSended(transId string, data string) bool {
 	monitorInfo := model.FindMRecord(transId)
@@ -94,7 +58,7 @@ func RunTA() {
 	Init()
 	list := RetryTransList()
 	if list != nil {
-		fmt.Println(list)
+		logger.Info(list)
 		list.Analyse()
 	}
 }

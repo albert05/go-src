@@ -1,17 +1,16 @@
-package service
+package tasks
 
 import (
-	"encoding/json"
 	"fmt"
 	"kd.explorer/common"
 	"kd.explorer/model"
 	"kd.explorer/util/dates"
-	"kd.explorer/util/https"
 	"kd.explorer/util/mysql"
 	"strconv"
 	"strings"
 	"time"
 	"kd.explorer/util/logger"
+	"kd.explorer/service/base"
 )
 
 type TaskResponse struct {
@@ -19,12 +18,19 @@ type TaskResponse struct {
 	Message string ``
 }
 
-const ExchangeURL = "https://deposit.koudailc.com/user-order-form/convert"
-
 func GoRunTask(taskList []mysql.MapModel) {
 	ch := make(chan string)
 	for _, task := range taskList {
-		go runT(task, ch)
+		switch task.GetAttrString("work_id") {
+			case "exchange":
+				go runExchange(task, ch)
+				break
+			case "daily":
+				go runDaily(task, ch)
+				break
+			default:
+				continue
+		}
 	}
 
 	for range taskList {
@@ -34,27 +40,27 @@ func GoRunTask(taskList []mysql.MapModel) {
 	close(ch)
 }
 
-func runT(task mysql.MapModel, ch chan<- string) {
+func runExchange(task mysql.MapModel, ch chan<- string) {
 	taskId := task.GetAttrInt("id")
 	logger.Info(fmt.Sprintf("taskID %d start work", taskId))
 	userKey := task.GetAttrString("user_key")
 
-	cookie, err := LoginK(userKey)
+	cookie, err := base.LoginK(userKey)
 	if err != nil {
 		ch <- "login failed"
 		return
 	}
 
-	var code Code
-	code.setCookie(cookie)
+	var code base.Code
+	code.SetCookie(cookie)
 	code.Refresh()
 	code.RandFileName()
 	code.CreateImage()
 
-	logger.Info(cookie, code.getFileName())
+	logger.Info(cookie, code.GetFileName())
 
 	model.UpdateTask(taskId, map[string]string{
-		"img_url": code.getFileName(),
+		"img_url": code.GetFileName(),
 	})
 
 	timePoint := task.GetAttrFloat("time_point")
@@ -69,29 +75,56 @@ func runT(task mysql.MapModel, ch chan<- string) {
 		"prize_number": prizeNumber,
 	}
 
-	body, err := https.Post(ExchangeURL, params, cookie)
+	isOk, errMsg := Exchange(cookie, params)
+	status := 3
+	if isOk {
+		status = 2
+	}
+
+	model.UpdateTask(taskId, map[string]string{
+		"status": strconv.Itoa(status),
+		"result": errMsg,
+	})
+
+	ch <- "success"
+}
+
+func runDaily(task mysql.MapModel, ch chan<- string) {
+	taskId := task.GetAttrInt("id")
+	logger.Info(fmt.Sprintf("taskID %d start work", taskId))
+	userKey := task.GetAttrString("user_key")
+
+	cookie, err := base.LoginK(userKey)
 	if err != nil {
-		logger.Info(err)
-		ch <- err.Error()
+		ch <- "login failed"
 		return
 	}
 
-	var result TaskResponse
-	json.Unmarshal(body, &result)
-
-	status := 3
-	msg := ""
-	if https.HttpSUCCESS != result.Code {
-		status = 2
-		msg = result.Message
+	params := map[string]string{
+		"type":           "3",  // 冒险性
 	}
-	model.UpdateTask(taskId, map[string]string{
-		"status": strconv.Itoa(status),
-		"result": msg,
-	})
+	_, errMsg := Earn(cookie, params)
+	logger.Info(fmt.Sprintf("taskID %d earn result: %s", taskId, errMsg))
 
-	logger.Info(userKey + " -- " + string(body))
+	_, errMsg = Share(cookie, nil)
+	logger.Info(fmt.Sprintf("taskID %d shake result: %s", taskId, errMsg))
+
 	ch <- "success"
+}
+
+func GetUpdateData(workId string) map[string]string {
+
+	if workId == "exchange" {
+		return map[string]string{
+			"status": "1",
+		}
+	} else if workId == "daily" {
+		return map[string]string{
+			"run_time": dates.AfterNDays(1),
+		}
+	}
+
+	return nil
 }
 
 func wait(timePoint float64, taskId int) string {

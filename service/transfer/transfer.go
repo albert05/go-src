@@ -1,4 +1,4 @@
-package service
+package transfer
 
 import (
 	"encoding/json"
@@ -6,6 +6,12 @@ import (
 	"kd.explorer/config"
 	"kd.explorer/util/https"
 	"strconv"
+	"kd.explorer/service/base"
+	"strings"
+	"kd.explorer/util/mail"
+	"kd.explorer/model"
+	"kd.explorer/util/dates"
+	"kd.explorer/util/logger"
 )
 
 const TransferListURL = "https://deposit.koudailc.com/credit/market-for-app-v2?appVersion=6.7.5&osVersion=11.300000&clientType=ios&deviceName=iPhone%20X&page=1&pageSize=2&sortRuleType=2"
@@ -52,6 +58,10 @@ func (item *TransferItem) String() string {
 	return string(b)
 }
 
+func GetTransferMsg(item TransferItem) string {
+	return fmt.Sprintf("转让年化：%.2f%s, 金额：%.2f, 剩余天数：%d", item.GetRate(), "%", item.GetFee(), item.RestDays)
+}
+
 type TransTmp struct {
 	Code  int            ``
 	Items []TransferItem `json:"creditItems"`
@@ -73,7 +83,7 @@ func InitCookie(isFlush bool) {
 	if config.CurUser != "" {
 		user = config.CurUser
 	}
-	cookie, err := LoginK(user)
+	cookie, err := base.LoginK(user)
 	if err == nil {
 		Cookie = cookie
 	}
@@ -89,7 +99,7 @@ func GetTransferList() (*TransList, error) {
 	json.Unmarshal(body, &result)
 
 	if TransLoginSuccessSTATUS != result.IsLogin {
-		fmt.Println(string(body))
+		logger.Info(string(body))
 	}
 
 	result.Cookie = Cookie
@@ -103,7 +113,7 @@ func RetryTransList() *TransList {
 		InitCookie(isFlush)
 		list, err := GetTransferList()
 		if err != nil {
-			fmt.Println(err)
+			logger.Error(err)
 			return nil
 		}
 
@@ -116,3 +126,34 @@ func RetryTransList() *TransList {
 
 	return nil
 }
+
+func (list *TransList) Analyse() {
+	monitorMsg := make([]string, 0)
+	for _, item := range list.List.Items {
+		if !CheckIsSended(item.GetKey(), item.String()) {
+			if true == SecKillRules.Check(item) {
+				dates.SleepSecond(config.SecKillTime)
+				if config.SecUser != "" {
+					if cookie, err := base.LoginK(config.SecUser); err == nil {
+						item.RunKill(cookie)
+					}
+				}
+			}
+			if true == MonitorRule.Check(item) {
+				monitorMsg = append(monitorMsg, GetTransferMsg(item))
+			}
+		}
+	}
+
+	logger.Info(monitorMsg)
+
+	// is send monitor msg
+	if len(monitorMsg) > 0 {
+		msg := "高息转让项目提醒 >> " + strings.Join(monitorMsg, "@@")
+		logger.Info(msg)
+		// send mail
+		email := model.FindUser(config.CurUser).GetAttrString("email")
+		mail.SendSingle(email, "高息转让项目提醒", msg)
+	}
+}
+

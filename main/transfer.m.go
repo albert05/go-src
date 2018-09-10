@@ -9,6 +9,7 @@ import (
 	"os"
 	"kd.explorer/exception"
 	"kd.explorer/util/logger"
+	"kd.explorer/service/transfer"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 
 	for now-startTime < config.RunDURATION {
 		// run analyse
-		service.RunTA()
+		transfer.RunTA()
 
 		dates.SleepSecond(config.SleepT)
 		logger.Info(fmt.Sprintf("sleep %f second", config.SleepT))

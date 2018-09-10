@@ -1,4 +1,4 @@
-package service
+package transfer
 
 import (
 	"reflect"

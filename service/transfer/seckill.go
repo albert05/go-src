@@ -1,4 +1,4 @@
-package service
+package transfer
 
 import (
 	"encoding/json"
@@ -7,6 +7,8 @@ import (
 	"kd.explorer/model"
 	"kd.explorer/util/https"
 	"kd.explorer/util/mail"
+	"kd.explorer/service/base"
+	"kd.explorer/util/logger"
 )
 
 const TransOrderURL = "https://deposit.koudailc.com/credit/apply-assignment"
@@ -22,7 +24,7 @@ func (item *TransferItem) RunKill(cookie string) {
 	body, err := https.Post(TransOrderURL, params, cookie)
 	if err != nil {
 		mail.SendSingle(config.AdminMailer, "高息转让项目提醒", err.Error())
-		fmt.Println(err)
+		logger.Error(err)
 		return
 	}
 
@@ -30,7 +32,7 @@ func (item *TransferItem) RunKill(cookie string) {
 	json.Unmarshal(body, &result)
 
 	msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 结果：%s", config.CurUser, item.InvestId, string(body))
-	fmt.Println(msg)
+	logger.Info(msg)
 	email := model.FindUser(config.CurUser).GetAttrString("email")
 	if email != config.AdminMailer {
 		mail.SendSingle(config.AdminMailer, "高息转让项目提醒", msg)
@@ -53,7 +55,7 @@ func (item *TransferItem) SyncRunKill() {
 }
 
 func (item *TransferItem) runT(user string, ch chan<- bool) {
-	cookie, err := LoginK(user)
+	cookie, err := base.LoginK(user)
 	if err != nil {
 		fmt.Println(err)
 		ch <- false
@@ -63,7 +65,7 @@ func (item *TransferItem) runT(user string, ch chan<- bool) {
 	params := item.MakeOrderParams(user)
 	body, err := https.Post(TransOrderURL, params, cookie)
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err)
 		ch <- false
 		return
 	}
@@ -73,13 +75,13 @@ func (item *TransferItem) runT(user string, ch chan<- bool) {
 
 	if result.Code == 0 && result.Uid != 0 {
 		msg := fmt.Sprintf("user:%s 购买转让项目invest_id：%s 成功", user, item.InvestId)
-		fmt.Println(msg)
+		logger.Info(msg)
 		mail.SendSingle(config.AdminMailer, "高息转让项目抢购成功提醒", msg)
 		ch <- true
 		return
 	}
 
-	fmt.Println(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 失败", user, item.InvestId))
+	logger.Info(fmt.Sprintf("user:%s 购买转让项目invest_id：%s 失败", user, item.InvestId))
 	ch <- false
 	return
 }

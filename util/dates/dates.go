@@ -43,6 +43,11 @@ func SleepSecond(t float64) {
 func NowYearMonthStr() string {
 	return time.Now().Format("200601")
 }
+
 func NowDayStr() string {
 	return time.Now().Format("20060102")
+}
+
+func AfterNDays(n int) string {
+	return time.Now().AddDate(0,0,n).Format(DefaultDateFormatSTR)
 }

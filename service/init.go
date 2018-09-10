@@ -18,7 +18,7 @@ func ConfigInit() {
 	flag.StringVar(&config.RuleKey, "rkey", "", "")
 	flag.Float64Var(&config.SecKillTime, "st", 3, "")
 
-	// exchange.go
+	// task.go
 	flag.StringVar(&config.JobType, "tp", "exchange", "jobType")
 	flag.StringVar(&config.JobList, "l", "", "jobList")
 	flag.Parse()

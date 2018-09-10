@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kd.explorer/util/mysql"
 	"strings"
+	"kd.explorer/util/logger"
 )
 
 const TaskTable = "tasks"
@@ -34,7 +35,7 @@ func FindTaskListByIds(ids string) []mysql.MapModel {
 	sql := fmt.Sprintf("SELECT * FROM %s WHERE id in(%s) limit 10", TaskTable, ids)
 	list, err := mysql.Conn.FindAll(sql)
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err)
 		return nil
 	}
 
