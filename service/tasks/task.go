@@ -120,7 +120,7 @@ func GetUpdateData(workId string) map[string]string {
 		}
 	} else if workId == "daily" {
 		return map[string]string{
-			"run_time": dates.AfterNDays(1),
+			"run_time": dates.DateAfterNDays(1),
 		}
 	}
 

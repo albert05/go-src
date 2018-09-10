@@ -48,6 +48,10 @@ func NowDayStr() string {
 	return time.Now().Format("20060102")
 }
 
-func AfterNDays(n int) string {
+func TimeAfterNDays(n int) string {
 	return time.Now().AddDate(0,0,n).Format(DefaultDateFormatSTR)
+}
+
+func DateAfterNDays(n int) string {
+	return time.Now().AddDate(0,0,n).Format("2006-01-02") + " 00:00:00"
 }
