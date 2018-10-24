@@ -24,11 +24,11 @@ func ConfigInit() {
 	flag.Parse()
 
 	// 获取本机IP
-	localIp, err := common.GetLocalIp()
-	if err != nil {
-		panic("GetLocalIp Err:" + err.Error())
-	}
-	config.LocalIp = localIp
+	//localIp, err := common.GetLocalIp()
+	//if err != nil {
+	//	panic("GetLocalIp Err:" + err.Error())
+	//}
+	//config.LocalIp = localIp
 
 	// log init
 	logger.SetConsole(false)
