@@ -6,7 +6,6 @@ import (
 	"kd.explorer/model"
 	"kd.explorer/util/dates"
 	"os"
-	"strings"
 	"time"
 	"kd.explorer/service"
 	"kd.explorer/exception"
@@ -48,8 +47,10 @@ func main() {
 			for workId, list := range taskList {
 				model.UpdateMultiTask(list, tasks.GetUpdateData(workId))
 
-				cmdStr := common.GetCmdStr(workId, map[string]string{"ids": strings.Join(list, ","), "curDir": currentDir})
-				common.Cmd(cmdStr)
+				for _, id := range list {
+					cmdStr := common.GetCmdStr(workId, map[string]string{"ids": id, "curDir": currentDir})
+					common.Cmd(cmdStr)
+				}
 			}
 		}
 
