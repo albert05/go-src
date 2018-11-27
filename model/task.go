@@ -21,7 +21,8 @@ func FindTask(id int) mysql.MapModel {
 }
 
 func FindTaskListByStatus(status int, wType string) []mysql.MapModel {
-	sql := fmt.Sprintf("SELECT * FROM %s WHERE status =%d and work_id in(%s)", TaskTable, status, wType)
+	// TODO tmp limit 1
+	sql := fmt.Sprintf("SELECT * FROM %s WHERE status =%d and work_id in(%s) limit 1", TaskTable, status, wType)
 	list, err := mysql.Conn.FindAll(sql)
 	if err != nil {
 		fmt.Println(err)
