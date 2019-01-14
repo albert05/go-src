@@ -6,6 +6,7 @@ import (
 	"sync"
 	"testing"
 	"time"
+	"spider/util/dates"
 )
 
 func logTest(i int) {
@@ -14,6 +15,10 @@ func logTest(i int) {
 	Warn("Warn>>>>>>>>>>>>>>>>>>>>>>>>>" + strconv.Itoa(i))
 	Error("Error>>>>>>>>>>>>>>>>>>>>>>>>>" + strconv.Itoa(i))
 	Fatal("Fatal>>>>>>>>>>>>>>>>>>>>>>>>>" + strconv.Itoa(i))
+}
+
+func logPath() (string, string) {
+	return "./logtest", dates.NowDayStr()+".log"
 }
 
 func TestLog(t *testing.T) {
@@ -33,13 +38,13 @@ func TestLog(t *testing.T) {
 	//指定日志文件备份方式为日期的方式
 	//第一个参数为日志文件存放目录
 	//第二个参数为日志文件命名
-	SetRollingDaily("./logtest", "test.log")
+	SetRollingDaily(logPath)
 
 	//指定日志级别  ALL，DEBUG，INFO，WARN，ERROR，FATAL，OFF 级别由低到高
 	//一般习惯是测试阶段为debug，生成环境为info以上
 	SetLevel(DEBUG)
 	wg := sync.WaitGroup{}
-	for i := 10; i > 0; i-- {
+	for i := 100; i > 0; i-- {
 		wg.Add(1)
 		go func() {
 			wg.Done()
