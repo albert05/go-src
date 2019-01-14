@@ -33,5 +33,5 @@ func ConfigInit() {
 	// log init
 	logger.SetConsole(false)
 	logger.SetLevel(logger.INFO)
-	logger.SetRollingDaily(common.GetLogPath())
+	logger.SetRollingDaily(common.GetLogPath)
 }

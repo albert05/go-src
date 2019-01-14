@@ -57,6 +57,7 @@ type _FILE struct {
 	mu       *sync.RWMutex
 	logfile  *os.File
 	lg       *log.Logger
+	callback Callback
 }
 
 func SetConsole(isConsole bool) {
@@ -92,12 +93,16 @@ func SetRollingFile(fileDir, fileName string, maxNumber int32, maxSize int64, _u
 	go fileMonitor()
 }
 
-func SetRollingDaily(fileDir, fileName string) {
+// RETURN fileDir, fileName
+type Callback func () (string, string)
+
+func SetRollingDaily(f Callback) {
+	fileDir, fileName := f()
 	RollingFile = false
 	dailyRolling = true
 	t, _ := time.Parse(DATEFORMAT, time.Now().Format(DATEFORMAT))
 	mkdirlog(fileDir)
-	logObj = &_FILE{dir: fileDir, filename: fileName, _date: &t, isCover: false, mu: new(sync.RWMutex)}
+	logObj = &_FILE{dir: fileDir, filename: fileName, _date: &t, isCover: false, mu: new(sync.RWMutex), callback:f}
 	logObj.mu.Lock()
 	defer logObj.mu.Unlock()
 
@@ -262,6 +267,19 @@ func (f *_FILE) isMustRename() bool {
 }
 
 func (f *_FILE) rename() {
+
+	if f.callback != nil {
+		if f.logfile != nil {
+			f.logfile.Close()
+		}
+
+		SetRollingDaily(f.callback)
+		return
+	}
+
+	f.mu.Lock()
+	defer f.mu.Unlock()
+
 	if dailyRolling {
 		fn := f.dir + "/" + f.filename + "." + f._date.Format(DATEFORMAT)
 		if !isExist(fn) && f.isMustRename() {
@@ -331,8 +349,6 @@ func fileCheck() {
 		}
 	}()
 	if logObj != nil && logObj.isMustRename() {
-		logObj.mu.Lock()
-		defer logObj.mu.Unlock()
 		logObj.rename()
 	}
 }
