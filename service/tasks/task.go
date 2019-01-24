@@ -100,10 +100,10 @@ func runDaily(task mysql.MapModel, ch chan<- string) {
 		return
 	}
 
-	params := map[string]string{
-		"type":           "3",  // 冒险性
-	}
-	_, errMsg := Earn(cookie, params)
+	//params := map[string]string{
+	//	"type":           "3",  // 冒险性
+	//}
+	_, errMsg := Earn(cookie, nil)
 	logger.Info(fmt.Sprintf("taskID %d earn result: %s", taskId, errMsg))
 
 	_, errMsg = Share(cookie, nil)

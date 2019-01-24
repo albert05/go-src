@@ -17,5 +17,5 @@ func Go(url string, cookie string, params map[string]string) (bool, string) {
 	json.Unmarshal(body, &result)
 	logger.Info(string(body))
 
-	return https.HttpSUCCESS != result.Code, result.Message
+	return https.HttpSUCCESS == result.Code, result.Message
 }
