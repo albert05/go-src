@@ -77,7 +77,7 @@ func runExchange(task mysql.MapModel, ch chan<- string) {
 
 	isOk, errMsg := Exchange(cookie, params)
 	status := 3
-	if isOk {
+	if !isOk {
 		status = 2
 	}
 
